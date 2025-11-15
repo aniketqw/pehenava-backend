@@ -1,6 +1,6 @@
 const Post = require('../models/post.model');
 const Feedback = require('../models/feedback.model');
-const fs = require('fs');
+const { deleteImage } = require('../config/cloudinary');
 
 /**
  * @desc    Create a new post
@@ -26,14 +26,14 @@ exports.createPost = async (req, res) => {
       });
     }
 
-    // Get photo path if uploaded
-    const photoPath = req.file ? req.file.path : null;
+    // Get photo URL from Cloudinary if uploaded
+    const photoUrl = req.file ? req.file.path : null; // Cloudinary provides URL in req.file.path
 
     // Create new post
     const post = new Post({
       name,
       description,
-      photo: photoPath,
+      photo: photoUrl, // Store Cloudinary URL
       userId: req.user._id // From auth middleware
     });
 
@@ -232,20 +232,19 @@ exports.updatePost = async (req, res) => {
 
     // Update photo if new one is uploaded
     if (req.file) {
-      // Delete old photo file if it exists
+      // Delete old photo from Cloudinary if it exists
       if (post.photo) {
         try {
-          if (fs.existsSync(post.photo)) {
-            fs.unlinkSync(post.photo);
-          }
+          await deleteImage(post.photo);
+          console.log('Old photo deleted from Cloudinary');
         } catch (err) {
-          console.error('Error deleting old photo:', err);
+          console.error('Error deleting old photo from Cloudinary:', err);
           // Continue anyway - don't fail the update
         }
       }
 
-      // Set new photo path
-      post.photo = req.file.path;
+      // Set new photo URL from Cloudinary
+      post.photo = req.file.path; // Cloudinary provides URL in req.file.path
       updated = true;
     }
 

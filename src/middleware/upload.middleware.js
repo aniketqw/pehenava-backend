@@ -1,23 +1,29 @@
 const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const { cloudinary } = require('../config/cloudinary');
 const path = require('path');
-const fs = require('fs');
 
-// Ensure uploads directory exists
-const uploadDir = 'uploads/posts';
-if (process.env.NODE_ENV !== 'production') {
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-}
-// Configure storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir); // Store in uploads/posts folder
-  },
-  filename: function (req, file, cb) {
-    // Create unique filename: timestamp-userId-originalname
-    const uniqueSuffix = Date.now() + '-' + req.user._id;
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+// Configure Cloudinary storage for Multer
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'pehenava/posts', // Folder in Cloudinary where images will be stored
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'], // Allowed file formats
+    transformation: [
+      {
+        width: 1200,
+        height: 1200,
+        crop: 'limit', // Don't crop, just limit size
+        quality: 'auto', // Automatic quality optimization
+        fetch_format: 'auto' // Automatic format conversion (WebP when supported)
+      }
+    ],
+    public_id: (req, file) => {
+      // Create unique filename: timestamp-userId-originalname (without extension)
+      const uniqueSuffix = Date.now() + '-' + req.user._id;
+      const originalName = path.parse(file.originalname).name; // Get filename without extension
+      return `${uniqueSuffix}-${originalName}`;
+    }
   }
 });
 
