@@ -3,3 +3,4 @@ node_modules
 package-lock.json
 uploads/
 CHANGELOG_UPDATE_POST.md
+TECHNICAL_DEEP_DIVE_UPDATE_POST.md

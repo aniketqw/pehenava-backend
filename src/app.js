@@ -46,6 +46,7 @@ app.use('/api', userRoutes); // User routes
 app.get('/', (req, res) => {
   res.send('Pehenava Backend is Running');
 });
+const PORT = process.env.PORT || 3000;
 // Only start server locally, not on Vercel
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
