@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const postController = require('../controllers/post.controller');
 const { protect } = require('../middleware/auth.middleware');
+const { validateFeedback } = require('../middleware/validation.middleware');
 const upload = require('../middleware/upload.middleware');
 
 /**
@@ -20,11 +21,11 @@ router.post(
  * @route   POST /api/posts/feedback
  * @desc    Give feedback (thumbs up/down) on a post
  * @access  Private (requires authentication)
- * @status  PLACEHOLDER - Returns 501 Not Implemented
  */
 router.post(
   '/feedback',
   protect,
+  validateFeedback,
   postController.giveFeedback
 );
 

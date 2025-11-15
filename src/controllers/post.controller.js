@@ -70,31 +70,116 @@ exports.createPost = async (req, res) => {
  * @desc    Give feedback on a post (thumbs up/down)
  * @route   POST /api/posts/feedback
  * @access  Private (requires authentication)
- * @status  PLACEHOLDER - To be implemented
  */
 exports.giveFeedback = async (req, res) => {
   try {
-    // TODO: Implement feedback functionality
-    // Expected request body: { postName, description, like: true/false }
-    // Expected response: { feedbackId, postId, postName, message }
+    const { postName, like, description } = req.body;
+    const userId = req.user._id; // From auth middleware
 
-    res.status(501).json({
-      message: 'Feedback feature coming soon',
-      note: 'This endpoint will allow users to give thumbs up/down on posts',
-      expectedRequest: {
-        postName: 'string',
-        description: 'string',
-        like: 'boolean (true=👍, false=👎)'
+    // Find the post by name
+    const post = await Post.findOne({ name: postName });
+    if (!post) {
+      return res.status(404).json({
+        message: 'Post not found',
+        postName: postName
+      });
+    }
+
+    // Check if feedback already exists for this user on this post
+    const existingFeedback = await Feedback.findOne({
+      postId: post._id,
+      userId: userId
+    });
+
+    let feedback;
+    let message;
+    let isUpdate = false;
+
+    if (existingFeedback) {
+      // User already gave feedback - update it
+      isUpdate = true;
+      const oldLike = existingFeedback.like;
+
+      // If changing from thumbs up to thumbs down (or vice versa)
+      if (oldLike !== like) {
+        // Update the feedback
+        existingFeedback.like = like;
+        if (description !== undefined) {
+          existingFeedback.description = description;
+        }
+        await existingFeedback.save();
+
+        // Adjust post counts
+        if (oldLike === true) {
+          // Was thumbs up, now thumbs down
+          post.likesCount = Math.max(0, post.likesCount - 1);
+          post.dislikesCount += 1;
+        } else {
+          // Was thumbs down, now thumbs up
+          post.dislikesCount = Math.max(0, post.dislikesCount - 1);
+          post.likesCount += 1;
+        }
+        await post.save();
+
+        message = `Feedback updated from ${oldLike ? '👍' : '👎'} to ${like ? '👍' : '👎'}`;
+      } else {
+        // Same feedback value, just update description if provided
+        if (description !== undefined) {
+          existingFeedback.description = description;
+          await existingFeedback.save();
+        }
+        message = 'Feedback updated successfully';
+      }
+
+      feedback = existingFeedback;
+    } else {
+      // New feedback - create it
+      feedback = new Feedback({
+        postId: post._id,
+        userId: userId,
+        like: like,
+        description: description
+      });
+      await feedback.save();
+
+      // Update post counts
+      if (like === true) {
+        post.likesCount += 1;
+      } else {
+        post.dislikesCount += 1;
+      }
+      await post.save();
+
+      message = `Feedback submitted successfully: ${like ? '👍 Thumbs up' : '👎 Thumbs down'}`;
+    }
+
+    // Return response
+    res.status(isUpdate ? 200 : 201).json({
+      message: message,
+      feedback: {
+        feedbackId: feedback._id,
+        postId: post._id,
+        postName: post.name,
+        like: feedback.like,
+        description: feedback.description,
+        createdAt: feedback.createdAt,
+        updatedAt: feedback.updatedAt
       },
-      expectedResponse: {
-        feedbackId: 'string',
-        postId: 'string',
-        postName: 'string',
-        message: 'string'
+      postStats: {
+        likesCount: post.likesCount,
+        dislikesCount: post.dislikesCount
       }
     });
   } catch (error) {
     console.error('Give feedback error:', error);
+
+    // Handle duplicate key error (shouldn't happen with our logic, but just in case)
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: 'Feedback already exists for this post'
+      });
+    }
+
     res.status(500).json({ message: error.message });
   }
 };

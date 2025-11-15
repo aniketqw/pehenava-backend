@@ -85,7 +85,47 @@ const validateLogin = [
   }
 ];
 
+/**
+ * Validation rules for post feedback
+ */
+const validateFeedback = [
+  body('postName')
+    .trim()
+    .notEmpty()
+    .withMessage('Post name is required')
+    .isLength({ min: 1 })
+    .withMessage('Post name cannot be empty'),
+
+  body('like')
+    .notEmpty()
+    .withMessage('Like field is required')
+    .isBoolean()
+    .withMessage('Like must be a boolean value (true or false)'),
+
+  body('description')
+    .optional()
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage('Description must be less than 500 characters'),
+
+  // Middleware to check validation results
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        message: 'Validation failed',
+        errors: errors.array().map(err => ({
+          field: err.path,
+          message: err.msg
+        }))
+      });
+    }
+    next();
+  }
+];
+
 module.exports = {
   validateRegister,
-  validateLogin
+  validateLogin,
+  validateFeedback
 };

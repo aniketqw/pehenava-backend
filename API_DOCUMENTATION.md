@@ -11,7 +11,7 @@ Base URL: `http://localhost:3000`
   - [Get Current User](#get-current-user)
 - [Post Endpoints](#post-endpoints)
   - [Create Post](#create-post)
-  - [Give Feedback (Placeholder)](#give-feedback-placeholder)
+  - [Give Feedback](#give-feedback)
   - [View Post (Placeholder)](#view-post-placeholder)
 - [User Endpoints](#user-endpoints)
   - [Create User (Legacy)](#create-user-legacy)
@@ -470,60 +470,127 @@ curl -X POST http://localhost:3000/api/posts \
 
 ---
 
-### Give Feedback (Placeholder)
+### Give Feedback
 
-**⚠️ COMING SOON:** This endpoint is currently a placeholder and will be implemented in a future update.
-
-Give thumbs up or thumbs down feedback on a post.
+Give thumbs up (👍) or thumbs down (👎) feedback on a post. Users can create new feedback or update existing feedback. Only one feedback per user per post is allowed.
 
 **Endpoint:** `POST /api/posts/feedback`
 
 **Access:** Private (Requires Authentication)
 
-**Planned Request Body:**
+**Request Headers:**
+```
+Authorization: Bearer <accessToken>
+Content-Type: application/json
+```
+
+**Request Body:**
 ```json
 {
   "postName": "Summer Fashion 2024",
-  "description": "Optional feedback description",
-  "like": true
+  "like": true,
+  "description": "Love this style!"
 }
 ```
 
 **Field Requirements:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| postName | String | Yes | Name of the post to give feedback on |
-| description | String | No | Optional feedback description |
+| postName | String | Yes | Name of the post to give feedback on (min 1 character) |
 | like | Boolean | Yes | true = 👍 thumbs up, false = 👎 thumbs down |
+| description | String | No | Optional feedback text (max 500 characters) |
 
-**Planned Response:**
+**Success Response - New Feedback (201 Created):**
 ```json
 {
-  "feedbackId": "673f6bc234567890def",
-  "postId": "673f5ac123456789abc",
-  "postName": "Summer Fashion 2024",
-  "message": "Feedback submitted successfully"
-}
-```
-
-**Current Response (501 Not Implemented):**
-```json
-{
-  "message": "Feedback feature coming soon",
-  "note": "This endpoint will allow users to give thumbs up/down on posts",
-  "expectedRequest": {
-    "postName": "string",
-    "description": "string",
-    "like": "boolean (true=👍, false=👎)"
+  "message": "Feedback submitted successfully: 👍 Thumbs up",
+  "feedback": {
+    "feedbackId": "673f6bc234567890def",
+    "postId": "673f5ac123456789abc",
+    "postName": "Summer Fashion 2024",
+    "like": true,
+    "description": "Love this style!",
+    "createdAt": "2025-11-15T12:30:00.000Z",
+    "updatedAt": "2025-11-15T12:30:00.000Z"
   },
-  "expectedResponse": {
-    "feedbackId": "string",
-    "postId": "string",
-    "postName": "string",
-    "message": "string"
+  "postStats": {
+    "likesCount": 1,
+    "dislikesCount": 0
   }
 }
 ```
+
+**Success Response - Updated Feedback (200 OK):**
+```json
+{
+  "message": "Feedback updated from 👍 to 👎",
+  "feedback": {
+    "feedbackId": "673f6bc234567890def",
+    "postId": "673f5ac123456789abc",
+    "postName": "Summer Fashion 2024",
+    "like": false,
+    "description": "Love this style!",
+    "createdAt": "2025-11-15T12:30:00.000Z",
+    "updatedAt": "2025-11-15T12:35:00.000Z"
+  },
+  "postStats": {
+    "likesCount": 0,
+    "dislikesCount": 1
+  }
+}
+```
+
+**Error Responses:**
+
+**400 Bad Request - Validation Failed:**
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "like",
+      "message": "Like must be a boolean value (true or false)"
+    }
+  ]
+}
+```
+
+**401 Unauthorized - No Token:**
+```json
+{
+  "message": "Not authorized, no token provided"
+}
+```
+
+**404 Not Found - Post Doesn't Exist:**
+```json
+{
+  "message": "Post not found",
+  "postName": "Non-Existent Post"
+}
+```
+
+**Example cURL - Create Thumbs Up:**
+```bash
+curl -X POST http://localhost:3000/api/posts/feedback \
+  -H "Authorization: Bearer eyJhbGc..." \
+  -H "Content-Type: application/json" \
+  -d '{"postName": "Summer Fashion 2024", "like": true, "description": "Love this!"}'
+```
+
+**Example cURL - Change to Thumbs Down:**
+```bash
+curl -X POST http://localhost:3000/api/posts/feedback \
+  -H "Authorization: Bearer eyJhbGc..." \
+  -H "Content-Type: application/json" \
+  -d '{"postName": "Summer Fashion 2024", "like": false}'
+```
+
+**Feedback Update Behavior:**
+- **New Feedback**: Creates new feedback document, increments likesCount or dislikesCount
+- **Same Vote**: Updates description only, counts unchanged
+- **Changed Vote (👍→👎 or 👎→👍)**: Updates feedback, decrements old count, increments new count
+- **Idempotent**: Sending same feedback multiple times is safe
 
 ---
 
