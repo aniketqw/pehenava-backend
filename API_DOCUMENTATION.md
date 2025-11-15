@@ -11,6 +11,7 @@ Base URL: `http://localhost:3000`
   - [Get Current User](#get-current-user)
 - [Post Endpoints](#post-endpoints)
   - [Create Post](#create-post)
+  - [Update Post](#update-post)
   - [Get All Posts](#get-all-posts)
   - [Search Posts](#search-posts)
   - [Give Feedback](#give-feedback)
@@ -469,6 +470,140 @@ curl -X POST http://localhost:3000/api/posts \
   -F "description=Latest trends for summer" \
   -F "photo=@/path/to/image.jpg"
 ```
+
+---
+
+### Update Post
+
+Update an existing post's description and/or photo. Only the post creator can update their own posts.
+
+**Endpoint:** `PUT /api/posts/:postId`
+
+**Access:** Private (Requires Authentication - Post Creator Only)
+
+**Request Headers:**
+```
+Authorization: Bearer <accessToken>
+Content-Type: multipart/form-data
+```
+
+**URL Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| postId | String | Yes | MongoDB ObjectId of the post to update |
+
+**Request Body (Form Data):**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| description | String | No | Updated description for the post |
+| photo | File | No | Updated image file (jpeg, jpg, png, gif, webp) max 5MB |
+
+**Note:** At least one field (description or photo) must be provided for update.
+
+**Success Response (200 OK):**
+```json
+{
+  "message": "Post updated successfully",
+  "post": {
+    "postId": "673f5ac123456789abc",
+    "name": "Summer Fashion 2024",
+    "description": "Updated description with more details",
+    "photo": "uploads/posts/1731667893362-new-photo.jpg",
+    "creator": {
+      "userId": "673d4eb555065106e56ec4d",
+      "Name": "John Doe",
+      "email": "john@example.com",
+      "role": "Influencer"
+    },
+    "likesCount": 5,
+    "dislikesCount": 2,
+    "createdAt": "2025-11-15T10:58:13.362Z",
+    "updatedAt": "2025-11-15T12:30:45.123Z"
+  }
+}
+```
+
+**Error Responses:**
+
+**400 Bad Request - Invalid Post ID Format:**
+```json
+{
+  "message": "Invalid post ID format"
+}
+```
+
+**400 Bad Request - No Updates Provided:**
+```json
+{
+  "message": "No updates provided. Please provide description and/or photo to update."
+}
+```
+
+**401 Unauthorized - No Token:**
+```json
+{
+  "message": "Not authorized, no token provided"
+}
+```
+
+**403 Forbidden - Not Post Creator:**
+```json
+{
+  "message": "Access denied. You can only update your own posts.",
+  "postCreator": "673d4eb555065106e56ec4d",
+  "currentUser": "673d5fc666176217f67fd5e"
+}
+```
+
+**404 Not Found:**
+```json
+{
+  "message": "Post not found",
+  "postId": "673f5ac123456789abc"
+}
+```
+
+**Error - Invalid File Type:**
+```json
+{
+  "message": "Only image files are allowed (jpeg, jpg, png, gif, webp)"
+}
+```
+
+**Example cURL (update description only):**
+```bash
+curl -X PUT http://localhost:3000/api/posts/673f5ac123456789abc \
+  -H "Authorization: Bearer eyJhbGc..." \
+  -F "description=Updated description with more details"
+```
+
+**Example cURL (update photo only):**
+```bash
+curl -X PUT http://localhost:3000/api/posts/673f5ac123456789abc \
+  -H "Authorization: Bearer eyJhbGc..." \
+  -F "photo=@/path/to/new-image.jpg"
+```
+
+**Example cURL (update both):**
+```bash
+curl -X PUT http://localhost:3000/api/posts/673f5ac123456789abc \
+  -H "Authorization: Bearer eyJhbGc..." \
+  -F "description=Updated description with more details" \
+  -F "photo=@/path/to/new-image.jpg"
+```
+
+**Use Cases:**
+- Update post description to add more details or correct typos
+- Replace old photo with a better quality image
+- Update both description and photo when refreshing content
+- Old photo file is automatically deleted when new photo is uploaded
+
+**Important Notes:**
+- **Name cannot be updated** (it's a unique identifier)
+- Only the post creator can update their own post
+- When updating photo, the old photo file is automatically deleted from server
+- At least one field must be provided (description or photo)
+- Post's like/dislike counts are preserved during update
 
 ---
 

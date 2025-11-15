@@ -14,10 +14,22 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// Security Middleware
-app.use(helmet()); // Set security headers
-app.use(cors()); // Enable CORS for all routes
-app.use(morgan('dev')); // Log HTTP requests
+// CORS Middleware - MUST come before other middleware
+// Handles all CORS requests including preflight OPTIONS requests automatically
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: false, // Set to false when using origin: '*'
+  optionsSuccessStatus: 200
+}));
+
+// Security Middleware - Configure helmet to not interfere with CORS
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginEmbedderPolicy: false,
+}));
+
 
 // Body Parser Middleware
 app.use(express.json());

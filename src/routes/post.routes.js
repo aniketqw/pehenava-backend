@@ -31,6 +31,20 @@ router.post(
   postController.giveFeedback
 );
 
+// ==================== PUT ROUTES ====================
+
+/**
+ * @route   PUT /api/posts/:postId
+ * @desc    Update a post (description and/or photo)
+ * @access  Private (requires authentication, post creator only)
+ */
+router.put(
+  '/:postId',
+  protect, // Verify JWT token first
+  upload.single('photo'), // Handle photo upload (field name: 'photo')
+  postController.updatePost
+);
+
 // ==================== GET ROUTES ====================
 // Note: Order matters! Specific routes (/search) must come before parameterized routes (/:postId)
 

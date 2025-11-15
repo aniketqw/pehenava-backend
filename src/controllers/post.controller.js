@@ -1,5 +1,6 @@
 const Post = require('../models/post.model');
 const Feedback = require('../models/feedback.model');
+const fs = require('fs');
 
 /**
  * @desc    Create a new post
@@ -180,6 +181,109 @@ exports.giveFeedback = async (req, res) => {
       });
     }
 
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * @desc    Update a post (description and/or photo)
+ * @route   PUT /api/posts/:postId
+ * @access  Private (requires authentication, post creator only)
+ */
+exports.updatePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { description } = req.body;
+    const mongoose = require('mongoose');
+
+    // Validate postId format
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+      return res.status(400).json({
+        message: 'Invalid post ID format'
+      });
+    }
+
+    // Find the post
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({
+        message: 'Post not found',
+        postId: postId
+      });
+    }
+
+    // Authorization check - Only post creator can update
+    if (post.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        message: 'Access denied. You can only update your own posts.',
+        postCreator: post.userId,
+        currentUser: req.user._id
+      });
+    }
+
+    // Track if any updates were made
+    let updated = false;
+
+    // Update description if provided
+    if (description !== undefined && description.trim() !== '') {
+      post.description = description.trim();
+      updated = true;
+    }
+
+    // Update photo if new one is uploaded
+    if (req.file) {
+      // Delete old photo file if it exists
+      if (post.photo) {
+        try {
+          if (fs.existsSync(post.photo)) {
+            fs.unlinkSync(post.photo);
+          }
+        } catch (err) {
+          console.error('Error deleting old photo:', err);
+          // Continue anyway - don't fail the update
+        }
+      }
+
+      // Set new photo path
+      post.photo = req.file.path;
+      updated = true;
+    }
+
+    // Check if any updates were made
+    if (!updated) {
+      return res.status(400).json({
+        message: 'No updates provided. Please provide description and/or photo to update.'
+      });
+    }
+
+    // Save updated post
+    await post.save();
+
+    // Populate user information
+    await post.populate('userId', 'Name email role');
+
+    // Return success response
+    res.status(200).json({
+      message: 'Post updated successfully',
+      post: {
+        postId: post._id,
+        name: post.name,
+        description: post.description,
+        photo: post.photo,
+        creator: {
+          userId: post.userId._id,
+          Name: post.userId.Name,
+          email: post.userId.email,
+          role: post.userId.role
+        },
+        likesCount: post.likesCount,
+        dislikesCount: post.dislikesCount,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt
+      }
+    });
+  } catch (error) {
+    console.error('Update post error:', error);
     res.status(500).json({ message: error.message });
   }
 };
