@@ -429,3 +429,68 @@ exports.viewPost = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+/**
+ * @desc    View post with all feedback by searching with post name
+ * @route   GET /api/posts/view/by-name
+ * @access  Private (requires authentication)
+ */
+exports.viewPostByName = async (req, res) => {
+  try {
+    const { name } = req.query;
+
+    // Validate name parameter
+    if (!name || name.trim() === '') {
+      return res.status(400).json({
+        message: 'Search parameter "name" is required'
+      });
+    }
+
+    // Find post by exact name (case-insensitive)
+    const post = await Post.findOne({
+      name: { $regex: `^${name.trim()}$`, $options: 'i' }
+    }).populate('userId', 'Name role');
+
+    if (!post) {
+      return res.status(404).json({
+        message: 'Post not found',
+        searchedName: name
+      });
+    }
+
+    // Find all feedback for this post
+    const feedbacks = await Feedback.find({ postId: post._id })
+      .populate('userId', 'Name')
+      .sort({ createdAt: -1 }); // Newest first
+
+    // Format feedback array
+    const formattedFeedbacks = feedbacks.map(feedback => ({
+      feedbackId: feedback._id,
+      userId: feedback.userId._id,
+      userName: feedback.userId.Name,
+      like: feedback.like,
+      description: feedback.description,
+      createdAt: feedback.createdAt
+    }));
+
+    // Build complete response (same format as viewPost)
+    res.status(200).json({
+      postId: post._id,
+      postName: post.name,
+      description: post.description,
+      photo: post.photo,
+      creator: {
+        userId: post.userId._id,
+        Name: post.userId.Name,
+        role: post.userId.role
+      },
+      feedbacks: formattedFeedbacks,
+      likesCount: post.likesCount,
+      dislikesCount: post.dislikesCount,
+      recommendations: [] // Empty array for future implementation
+    });
+  } catch (error) {
+    console.error('View post by name error:', error);
+    res.status(500).json({ message: error.message });
+  }
+};

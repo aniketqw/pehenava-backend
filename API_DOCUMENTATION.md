@@ -16,6 +16,7 @@ Base URL: `http://localhost:3000`
   - [Search Posts](#search-posts)
   - [Give Feedback](#give-feedback)
   - [View Post](#view-post)
+  - [View Post by Name](#view-post-by-name)
 - [User Endpoints](#user-endpoints)
   - [Create User (Legacy)](#create-user-legacy)
   - [Get All Users](#get-all-users)
@@ -1016,6 +1017,130 @@ curl -X GET http://localhost:3000/api/posts/view/673f5ac123456789abc \
 - Empty feedback array means no one has given feedback yet
 - Recommendations array is empty for now (future feature)
 - Photo field is null if post was created without a photo
+
+---
+
+### View Post by Name
+
+View detailed post information with ALL feedback by searching with the exact post name. This is a convenience endpoint that combines search and view in a single request.
+
+**Endpoint:** `GET /api/posts/view/by-name`
+
+**Access:** Private (Requires Authentication)
+
+**Request Headers:**
+```
+Authorization: Bearer <accessToken>
+```
+
+**Query Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| name | String | Yes | Exact post name (case-insensitive) |
+
+**Example URLs:**
+```
+GET /api/posts/view/by-name?name=Summer Fashion 2024
+GET /api/posts/view/by-name?name=summer fashion 2024
+```
+
+**Success Response (200 OK):**
+```json
+{
+  "postId": "673f5ac123456789abc",
+  "postName": "Summer Fashion 2024",
+  "description": "Latest summer fashion trends featuring lightweight fabrics and vibrant colors",
+  "photo": "uploads/posts/1731667893362-673d4eb.jpg",
+  "creator": {
+    "userId": "673d4eb555065106e56ec4d",
+    "Name": "John Doe",
+    "role": "Influencer"
+  },
+  "feedbacks": [
+    {
+      "feedbackId": "673f6bc234567890def",
+      "userId": "673d5ab123456789xyz",
+      "userName": "Jane Smith",
+      "like": true,
+      "description": "Love this style! Perfect for summer",
+      "createdAt": "2025-11-15T12:30:00.000Z"
+    }
+  ],
+  "likesCount": 15,
+  "dislikesCount": 3,
+  "recommendations": []
+}
+```
+
+**Response Format:**
+Identical to the View Post endpoint - returns complete post details with all feedback.
+
+**Error Responses:**
+
+**400 Bad Request - Missing Name:**
+```json
+{
+  "message": "Search parameter \"name\" is required"
+}
+```
+
+**401 Unauthorized - No Token:**
+```json
+{
+  "message": "Not authorized, no token provided"
+}
+```
+
+**404 Not Found - Post Doesn't Exist:**
+```json
+{
+  "message": "Post not found",
+  "searchedName": "Non-Existent Post"
+}
+```
+
+**Example cURL:**
+```bash
+curl -X GET "http://localhost:3000/api/posts/view/by-name?name=Summer%20Fashion%202024" \
+  -H "Authorization: Bearer eyJhbGc..."
+```
+
+**Use Cases:**
+- **Single API call**: Get complete post details by name without first searching for ID
+- **Simplified frontend logic**: No need for two-step process (search → view)
+- **Faster response**: One round trip instead of two
+- **Known post names**: When you know the exact post name (e.g., from URL parameter)
+
+**Comparison with Alternatives:**
+
+**Option 1: View Post by Name (This Endpoint)**
+```javascript
+// Single API call
+GET /api/posts/view/by-name?name=Summer Fashion 2024
+// Returns: Complete post with all feedback
+```
+✅ Simple, fast, one request
+
+**Option 2: Search + View (Two Steps)**
+```javascript
+// Step 1: Search
+GET /api/posts/search?name=Summer Fashion 2024
+// Returns: [{ postId: "abc...", name: "Summer Fashion 2024" }]
+
+// Step 2: View
+GET /api/posts/view/abc...
+// Returns: Complete post with all feedback
+```
+❌ More complex, two requests, slower
+
+**Important Notes:**
+- **Exact match required**: Name must match exactly (case-insensitive)
+  - "Summer Fashion 2024" ✓
+  - "summer fashion 2024" ✓
+  - "Summer" ❌ (partial match not supported)
+- **Case-insensitive**: Matching ignores case differences
+- **Response format**: Identical to View Post endpoint for consistency
+- **URL encoding**: Remember to encode spaces and special characters in the query string
 
 ---
 

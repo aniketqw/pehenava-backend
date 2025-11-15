@@ -60,6 +60,17 @@ router.get(
 );
 
 /**
+ * @route   GET /api/posts/view/by-name
+ * @desc    View post with all feedback by searching with post name
+ * @access  Private (requires authentication)
+ */
+router.get(
+  '/view/by-name',
+  protect,
+  postController.viewPostByName
+);
+
+/**
  * @route   GET /api/posts/view/:postId
  * @desc    View specific post with all feedback and recommendations
  * @access  Private (requires authentication)
