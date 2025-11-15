@@ -1,6 +1,11 @@
 # Pehenava Backend API Documentation
 
-Base URL: `http://localhost:3000`
+## Base URLs
+
+**Production:** `https://pehenava-backend.vercel.app`
+**Local Development:** `http://localhost:3000`
+
+> **Note:** Use the production URL for deployed applications and the local URL when running the backend on your development machine.
 
 ## Table of Contents
 - [Authentication Endpoints](#authentication-endpoints)
@@ -22,6 +27,82 @@ Base URL: `http://localhost:3000`
   - [Get All Users](#get-all-users)
 - [Error Responses](#error-responses)
 - [Status Codes](#status-codes)
+- [Cloudinary Image Storage](#cloudinary-image-storage)
+
+---
+
+## Cloudinary Image Storage
+
+All post images are stored on **Cloudinary CDN** for optimal performance, automatic optimization, and global content delivery.
+
+### **Image URLs Format**
+
+Images are returned as full HTTPS URLs:
+```
+https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/1732123456-userId-filename.jpg
+```
+
+### **Automatic Optimizations**
+
+When you upload an image, Cloudinary automatically:
+- ✅ **Resizes** to max 1200x1200px (maintains aspect ratio)
+- ✅ **Optimizes quality** - Reduces file size while maintaining visual quality
+- ✅ **Converts format** - Serves WebP to supported browsers, JPEG to others
+- ✅ **CDN Delivery** - Serves from nearest edge server for fast loading
+
+### **On-the-Fly Transformations**
+
+You can transform any image URL by adding parameters. Simply modify the URL path:
+
+**Original URL:**
+```
+https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/image.jpg
+```
+
+**Resize to 300x300 (crop-to-fill):**
+```
+https://res.cloudinary.com/dhfdccotv/image/upload/w_300,h_300,c_fill/v1732123456/pehenava/posts/image.jpg
+```
+
+**Resize to 500px width (maintain aspect ratio):**
+```
+https://res.cloudinary.com/dhfdccotv/image/upload/w_500/v1732123456/pehenava/posts/image.jpg
+```
+
+**Apply grayscale effect:**
+```
+https://res.cloudinary.com/dhfdccotv/image/upload/e_grayscale/v1732123456/pehenava/posts/image.jpg
+```
+
+### **Common Transformations**
+
+| Transformation | Parameter | Example |
+|----------------|-----------|---------|
+| Width | `w_500` | Resize to 500px wide |
+| Height | `h_500` | Resize to 500px tall |
+| Crop | `c_fill` | Crop to fill dimensions |
+| Quality | `q_80` | Set quality to 80% |
+| Format | `f_webp` | Convert to WebP format |
+| Grayscale | `e_grayscale` | Apply grayscale effect |
+| Blur | `e_blur:300` | Apply blur effect |
+
+**Combining transformations:**
+```
+https://res.cloudinary.com/dhfdccotv/image/upload/w_400,h_400,c_fill,q_auto,f_auto/v1732123456/pehenava/posts/image.jpg
+```
+This creates a 400x400 thumbnail with automatic quality and format optimization.
+
+### **Benefits**
+
+- 🚀 **Fast Loading** - Global CDN with edge caching
+- 📱 **Responsive Images** - Generate any size on-demand
+- 💾 **Storage Savings** - Automatic compression reduces bandwidth
+- 🔒 **Secure** - HTTPS delivery for all images
+- ♻️ **Auto Cleanup** - Old photos deleted when posts are updated
+
+### **Migration Note**
+
+> **Important:** If you have existing posts with local file paths (e.g., `uploads/posts/...`), these will no longer work. All new uploads now return Cloudinary URLs. You may need to re-upload old images or implement a migration script.
 
 ---
 
@@ -411,7 +492,7 @@ Content-Type: multipart/form-data
     "postId": "673f5ac123456789abc",
     "name": "Summer Fashion 2024",
     "description": "Latest summer fashion trends featuring...",
-    "photo": "uploads/posts/1731667893362-673d4eb555065106.jpg",
+    "photo": "https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/1732123456-673d4eb555065106-summer-fashion.jpg",
     "creator": {
       "userId": "673d4eb555065106e56ec4d",
       "Name": "John Doe",
@@ -424,6 +505,8 @@ Content-Type: multipart/form-data
   }
 }
 ```
+
+> **Note:** Images are now stored on Cloudinary CDN and returned as full HTTPS URLs for optimal performance and global delivery.
 
 **Error Responses:**
 
@@ -509,7 +592,7 @@ Content-Type: multipart/form-data
     "postId": "673f5ac123456789abc",
     "name": "Summer Fashion 2024",
     "description": "Updated description with more details",
-    "photo": "uploads/posts/1731667893362-new-photo.jpg",
+    "photo": "https://res.cloudinary.com/dhfdccotv/image/upload/v1732134567/pehenava/posts/1732134567-673d4eb555065106-new-photo.jpg",
     "creator": {
       "userId": "673d4eb555065106e56ec4d",
       "Name": "John Doe",
@@ -597,12 +680,12 @@ curl -X PUT http://localhost:3000/api/posts/673f5ac123456789abc \
 - Update post description to add more details or correct typos
 - Replace old photo with a better quality image
 - Update both description and photo when refreshing content
-- Old photo file is automatically deleted when new photo is uploaded
+- Old photo is automatically deleted from Cloudinary when new photo is uploaded
 
 **Important Notes:**
 - **Name cannot be updated** (it's a unique identifier)
 - Only the post creator can update their own post
-- When updating photo, the old photo file is automatically deleted from server
+- When uploading a new photo, the old photo is automatically deleted from Cloudinary to save storage space
 - At least one field must be provided (description or photo)
 - Post's like/dislike counts are preserved during update
 
@@ -631,7 +714,7 @@ Authorization: Bearer <accessToken>
       "postId": "673f5ac123456789abc",
       "name": "Summer Fashion 2024",
       "description": "Latest summer fashion trends featuring...",
-      "photo": "uploads/posts/1731667893362-673d4eb555065106.jpg",
+      "photo": "https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/1732123456-673d4eb555065106-summer.jpg",
       "creator": {
         "userId": "673d4eb555065106e56ec4d",
         "Name": "John Doe",
@@ -802,6 +885,55 @@ Content-Type: application/json
 | like | Boolean | Yes | true = 👍 thumbs up, false = 👎 thumbs down |
 | description | String | No | Optional feedback text (max 500 characters) |
 
+---
+
+## ⚙️ How This Endpoint Handles Both Creation and Update
+
+This single endpoint intelligently handles **both creating new feedback and updating existing feedback** using an "upsert" pattern:
+
+### **Decision Logic:**
+
+1. **Lookup Check:**
+   ```
+   Query: Find feedback where postId = <post._id> AND userId = <current user>
+   ```
+
+2. **If NO existing feedback found:**
+   - **Action:** CREATE new feedback
+   - **Response:** `201 Created`
+   - **Post Count:** Increment `likesCount` (if like=true) or `dislikesCount` (if like=false)
+
+3. **If existing feedback found:**
+   - **Action:** UPDATE existing feedback
+   - **Response:** `200 OK`
+   - **Post Count Logic:**
+     - If `like` value **changed** (👍→👎 or 👎→👍): Decrement old count, increment new count
+     - If `like` value **same**: No count changes, only update description
+
+### **Why This Design?**
+
+- ✅ **One user = One feedback per post** - Prevents spam
+- ✅ **Simpler frontend** - No need to track if feedback exists
+- ✅ **Atomic operations** - No race conditions
+- ✅ **Idempotent** - Safe to call multiple times
+
+### **Example Flow:**
+
+```
+User Alice on "Summer Fashion 2024":
+
+1st Call: POST { like: true, description: "Love it!" }
+   → No existing feedback → CREATE → likesCount: 0→1
+
+2nd Call: POST { like: true, description: "Really love it!" }
+   → Existing feedback found → UPDATE description only → likesCount: 1
+
+3rd Call: POST { like: false, description: "Changed my mind" }
+   → Existing feedback found → UPDATE like value → likesCount: 1→0, dislikesCount: 0→1
+```
+
+---
+
 **Success Response - New Feedback (201 Created):**
 ```json
 {
@@ -925,7 +1057,7 @@ GET /api/posts/view/673f5ac123456789abc
   "postId": "673f5ac123456789abc",
   "postName": "Summer Fashion 2024",
   "description": "Latest summer fashion trends featuring lightweight fabrics and vibrant colors",
-  "photo": "uploads/posts/1731667893362-673d4eb.jpg",
+  "photo": "https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/1732123456-673d4eb-summer.jpg",
   "creator": {
     "userId": "673d4eb555065106e56ec4d",
     "Name": "John Doe",
@@ -1050,7 +1182,7 @@ GET /api/posts/view/by-name?name=summer fashion 2024
   "postId": "673f5ac123456789abc",
   "postName": "Summer Fashion 2024",
   "description": "Latest summer fashion trends featuring lightweight fabrics and vibrant colors",
-  "photo": "uploads/posts/1731667893362-673d4eb.jpg",
+  "photo": "https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/1732123456-673d4eb-summer.jpg",
   "creator": {
     "userId": "673d4eb555065106e56ec4d",
     "Name": "John Doe",
