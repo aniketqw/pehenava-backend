@@ -1,0 +1,489 @@
+{
+	"info": {
+		"_postman_id": "pehenava-api-collection-2025",
+		"name": "Pehenava Backend API",
+		"description": "Complete API collection for Pehenava Backend with Authentication, Posts, and User endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('accessToken', response.accessToken);",
+									"    pm.environment.set('refreshToken', response.refreshToken);",
+									"    console.log('Tokens saved to environment variables');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"SecurePass123\",\n  \"role\": \"Influencer\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user account. Returns JWT access and refresh tokens.\n\n**Password Requirements:**\n- Minimum 8 characters\n- At least one uppercase letter\n- At least one lowercase letter\n- At least one number\n\n**Valid Roles:**\n- Influencer\n- Recommender\n- Explorer"
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('accessToken', response.accessToken);",
+									"    pm.environment.set('refreshToken', response.refreshToken);",
+									"    console.log('Tokens saved to environment variables');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"SecurePass123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authenticate existing user with email and password. Returns JWT tokens."
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('accessToken', response.accessToken);",
+									"    console.log('New access token saved');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/refresh",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"refresh"
+							]
+						},
+						"description": "Get a new access token using refresh token. Access tokens expire after 1 hour."
+					},
+					"response": []
+				},
+				{
+					"name": "Logout User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						},
+						"description": "Logout user by invalidating the refresh token. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						},
+						"description": "Get currently authenticated user's information. Requires valid access token."
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration, login, token management, and logout"
+		},
+		{
+			"name": "Posts",
+			"item": [
+				{
+					"name": "Create Post (without photo)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Summer Fashion 2024",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Latest summer fashion trends featuring lightweight fabrics and vibrant colors",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/posts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							]
+						},
+						"description": "Create a new fashion post without a photo. Requires authentication.\n\n**Required Fields:**\n- name (unique)\n- description"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Post (with photo)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Winter Collection 2025",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Cozy winter outfits with warm layers and stylish accessories",
+									"type": "text"
+								},
+								{
+									"key": "photo",
+									"type": "file",
+									"src": [],
+									"description": "Upload an image file (jpeg, jpg, png, gif, webp) - Max 5MB"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/posts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							]
+						},
+						"description": "Create a new fashion post with a photo. Requires authentication.\n\n**Required Fields:**\n- name (unique)\n- description\n\n**Optional:**\n- photo (image file, max 5MB)\n\n**Allowed Image Types:**\n- jpeg, jpg, png, gif, webp"
+					},
+					"response": []
+				},
+				{
+					"name": "Give Feedback (Placeholder)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"postName\": \"Summer Fashion 2024\",\n  \"description\": \"Love this style!\",\n  \"like\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/posts/feedback",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"feedback"
+							]
+						},
+						"description": "⚠️ PLACEHOLDER - Returns 501 Not Implemented\n\nFuture endpoint to give thumbs up/down feedback on posts.\n\n**Planned Fields:**\n- postName: Name of post to give feedback on\n- description: Optional feedback text\n- like: true (👍) or false (👎)"
+					},
+					"response": []
+				},
+				{
+					"name": "View Post (Placeholder)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/posts/view?postName=Summer Fashion 2024",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"view"
+							],
+							"query": [
+								{
+									"key": "postName",
+									"value": "Summer Fashion 2024"
+								}
+							]
+						},
+						"description": "⚠️ PLACEHOLDER - Returns 501 Not Implemented\n\nFuture endpoint to view post with all feedback and recommendations.\n\n**Planned Query Params:**\n- postName: Name of post to view"
+					},
+					"response": []
+				}
+			],
+			"description": "Post management endpoints for creating posts, giving feedback, and viewing posts with recommendations"
+		},
+		{
+			"name": "Users (Legacy)",
+			"item": [
+				{
+					"name": "Create User (Legacy)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Name\": \"Jane Smith\",\n  \"email\": \"jane.smith@example.com\",\n  \"password\": \"SecurePass456\",\n  \"role\": \"Recommender\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "⚠️ DEPRECATED - Use /api/auth/register instead\n\nLegacy endpoint for creating users without JWT tokens. Kept for backward compatibility."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "Get list of all users. Passwords are excluded from response."
+					},
+					"response": []
+				}
+			],
+			"description": "Legacy user endpoints (use Authentication endpoints instead for new implementations)"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

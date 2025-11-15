@@ -9,6 +9,10 @@ Base URL: `http://localhost:3000`
   - [Refresh Token](#refresh-token)
   - [Logout User](#logout-user)
   - [Get Current User](#get-current-user)
+- [Post Endpoints](#post-endpoints)
+  - [Create Post](#create-post)
+  - [Give Feedback (Placeholder)](#give-feedback-placeholder)
+  - [View Post (Placeholder)](#view-post-placeholder)
 - [User Endpoints](#user-endpoints)
   - [Create User (Legacy)](#create-user-legacy)
   - [Get All Users](#get-all-users)
@@ -368,6 +372,225 @@ Authorization: Bearer <accessToken>
 ```bash
 curl -X GET http://localhost:3000/api/auth/me \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+```
+
+---
+
+## Post Endpoints
+
+### Create Post
+
+Create a new fashion post with optional photo upload.
+
+**Endpoint:** `POST /api/posts`
+
+**Access:** Private (Requires Authentication)
+
+**Request Headers:**
+```
+Authorization: Bearer <accessToken>
+Content-Type: multipart/form-data
+```
+
+**Request Body (Form Data):**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| name | String | Yes | Unique name for the post |
+| description | String | Yes | Description of the post |
+| photo | File | No | Image file (jpeg, jpg, png, gif, webp) max 5MB |
+
+**Success Response (201 Created):**
+```json
+{
+  "message": "Post created successfully",
+  "post": {
+    "postId": "673f5ac123456789abc",
+    "name": "Summer Fashion 2024",
+    "description": "Latest summer fashion trends featuring...",
+    "photo": "uploads/posts/1731667893362-673d4eb555065106.jpg",
+    "creator": {
+      "userId": "673d4eb555065106e56ec4d",
+      "Name": "John Doe",
+      "email": "john@example.com",
+      "role": "Influencer"
+    },
+    "likesCount": 0,
+    "dislikesCount": 0,
+    "createdAt": "2025-11-15T10:58:13.362Z"
+  }
+}
+```
+
+**Error Responses:**
+
+**400 Bad Request - Missing Fields:**
+```json
+{
+  "message": "Name and description are required"
+}
+```
+
+**401 Unauthorized - No Token:**
+```json
+{
+  "message": "Not authorized, no token provided"
+}
+```
+
+**409 Conflict - Duplicate Name:**
+```json
+{
+  "message": "Post with this name already exists"
+}
+```
+
+**Error - Invalid File Type:**
+```json
+{
+  "message": "Only image files are allowed (jpeg, jpg, png, gif, webp)"
+}
+```
+
+**Example cURL (without photo):**
+```bash
+curl -X POST http://localhost:3000/api/posts \
+  -H "Authorization: Bearer eyJhbGc..." \
+  -F "name=Summer Fashion 2024" \
+  -F "description=Latest trends for summer"
+```
+
+**Example cURL (with photo):**
+```bash
+curl -X POST http://localhost:3000/api/posts \
+  -H "Authorization: Bearer eyJhbGc..." \
+  -F "name=Summer Fashion 2024" \
+  -F "description=Latest trends for summer" \
+  -F "photo=@/path/to/image.jpg"
+```
+
+---
+
+### Give Feedback (Placeholder)
+
+**⚠️ COMING SOON:** This endpoint is currently a placeholder and will be implemented in a future update.
+
+Give thumbs up or thumbs down feedback on a post.
+
+**Endpoint:** `POST /api/posts/feedback`
+
+**Access:** Private (Requires Authentication)
+
+**Planned Request Body:**
+```json
+{
+  "postName": "Summer Fashion 2024",
+  "description": "Optional feedback description",
+  "like": true
+}
+```
+
+**Field Requirements:**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| postName | String | Yes | Name of the post to give feedback on |
+| description | String | No | Optional feedback description |
+| like | Boolean | Yes | true = 👍 thumbs up, false = 👎 thumbs down |
+
+**Planned Response:**
+```json
+{
+  "feedbackId": "673f6bc234567890def",
+  "postId": "673f5ac123456789abc",
+  "postName": "Summer Fashion 2024",
+  "message": "Feedback submitted successfully"
+}
+```
+
+**Current Response (501 Not Implemented):**
+```json
+{
+  "message": "Feedback feature coming soon",
+  "note": "This endpoint will allow users to give thumbs up/down on posts",
+  "expectedRequest": {
+    "postName": "string",
+    "description": "string",
+    "like": "boolean (true=👍, false=👎)"
+  },
+  "expectedResponse": {
+    "feedbackId": "string",
+    "postId": "string",
+    "postName": "string",
+    "message": "string"
+  }
+}
+```
+
+---
+
+### View Post (Placeholder)
+
+**⚠️ COMING SOON:** This endpoint is currently a placeholder and will be implemented in a future update.
+
+View a post with all its feedback and recommendations.
+
+**Endpoint:** `GET /api/posts/view`
+
+**Access:** Private (Requires Authentication)
+
+**Planned Request Body:**
+```json
+{
+  "postName": "Summer Fashion 2024"
+}
+```
+
+**Planned Response:**
+```json
+{
+  "postId": "673f5ac123456789abc",
+  "postName": "Summer Fashion 2024",
+  "description": "Latest summer fashion trends...",
+  "photo": "uploads/posts/1731667893362-673d4eb.jpg",
+  "creator": {
+    "userId": "673d4eb555065106e56ec4d",
+    "Name": "John Doe",
+    "role": "Influencer"
+  },
+  "feedbacks": [
+    {
+      "feedbackId": "673f6bc234567890def",
+      "userId": "673d5ab123456789xyz",
+      "userName": "Jane Smith",
+      "like": true,
+      "createdAt": "2025-11-15T11:15:30.000Z"
+    }
+  ],
+  "likesCount": 5,
+  "dislikesCount": 2,
+  "recommendations": []
+}
+```
+
+**Current Response (501 Not Implemented):**
+```json
+{
+  "message": "View post feature coming soon",
+  "note": "This endpoint will show post details with all feedback and recommendations",
+  "expectedRequest": {
+    "postName": "string"
+  },
+  "expectedResponse": {
+    "postId": "string",
+    "postName": "string",
+    "description": "string",
+    "photo": "string",
+    "creator": "object",
+    "feedbacks": "array",
+    "likesCount": "number",
+    "dislikesCount": "number",
+    "recommendations": "array (to be defined)"
+  }
+}
 ```
 
 ---
