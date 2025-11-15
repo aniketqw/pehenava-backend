@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # MongoDB Database Service
+  mongo:
+    image: mongo:latest
+    container_name: pehenava-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=pehenava
+    networks:
+      - pehenava-network
+
+  # Node.js Application Service
+  app:
+    build: .
+    container_name: pehenava-backend
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    networks:
+      - pehenava-network
+    volumes:
+      - ./src:/app/src  # Mount source code for development (optional)
+
+# Named volumes for data persistence
+volumes:
+  mongo-data:
+
+# Network for container communication
+networks:
+  pehenava-network:
+    driver: bridge
