@@ -55,7 +55,7 @@ MONGO_URI=mongodb://localhost:27017/pehenava
 - If using MongoDB locally, make sure MongoDB is running on your machine
 - If using MongoDB Atlas, replace `MONGO_URI` with your Atlas connection string:
   ```
-  MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/pehenava?retryWrites=true&w=majority
+  MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/pehenava?appName=APP_NAME
   ```
 
 ### Step 3: Start MongoDB (if using local MongoDB)
