@@ -4,10 +4,11 @@ const fs = require('fs');
 
 // Ensure uploads directory exists
 const uploadDir = 'uploads/posts';
+if (process.env.NODE_ENV !== 'production') {
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
-
+}
 // Configure storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

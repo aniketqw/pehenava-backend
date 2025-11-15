@@ -2,3 +2,4 @@ node_modules
 .env
 package-lock.json
 uploads/
+CHANGELOG_UPDATE_POST.md
