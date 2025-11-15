@@ -185,42 +185,140 @@ exports.giveFeedback = async (req, res) => {
 };
 
 /**
- * @desc    View post with all feedback and recommendations
- * @route   GET /api/posts/view
+ * @desc    Get all posts with basic info and counts
+ * @route   GET /api/posts
  * @access  Private (requires authentication)
- * @status  PLACEHOLDER - To be implemented
+ */
+exports.getAllPosts = async (req, res) => {
+  try {
+    // Find all posts sorted by creation date (newest first)
+    const posts = await Post.find()
+      .populate('userId', 'Name role') // Populate creator info (exclude email for privacy)
+      .sort({ createdAt: -1 }); // Newest first
+
+    // Format response - include counts but NOT feedback details
+    const formattedPosts = posts.map(post => ({
+      postId: post._id,
+      name: post.name,
+      description: post.description,
+      photo: post.photo,
+      creator: {
+        userId: post.userId._id,
+        Name: post.userId.Name,
+        role: post.userId.role
+      },
+      likesCount: post.likesCount,
+      dislikesCount: post.dislikesCount,
+      createdAt: post.createdAt
+    }));
+
+    res.status(200).json({
+      message: 'Posts retrieved successfully',
+      count: formattedPosts.length,
+      posts: formattedPosts
+    });
+  } catch (error) {
+    console.error('Get all posts error:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * @desc    Search posts by name
+ * @route   GET /api/posts/search
+ * @access  Private (requires authentication)
+ */
+exports.searchPosts = async (req, res) => {
+  try {
+    const { name } = req.query;
+
+    // Validate name parameter
+    if (!name || name.trim() === '') {
+      return res.status(400).json({
+        message: 'Search parameter "name" is required'
+      });
+    }
+
+    // Search posts by name (case-insensitive partial match)
+    const posts = await Post.find({
+      name: { $regex: name.trim(), $options: 'i' } // Case-insensitive regex search
+    }).select('_id name'); // Only select postId and name
+
+    // Format results
+    const results = posts.map(post => ({
+      postId: post._id,
+      name: post.name
+    }));
+
+    res.status(200).json({
+      message: 'Search completed',
+      count: results.length,
+      results: results
+    });
+  } catch (error) {
+    console.error('Search posts error:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * @desc    View post with all feedback and recommendations
+ * @route   GET /api/posts/view/:postId
+ * @access  Private (requires authentication)
  */
 exports.viewPost = async (req, res) => {
   try {
-    // TODO: Implement view post with feedback functionality
-    // Expected request body: { postName }
-    // Expected response: { postId, postName, feedbacks[], recommendations[] }
+    const { postId } = req.params;
+    const mongoose = require('mongoose');
 
-    res.status(501).json({
-      message: 'View post feature coming soon',
-      note: 'This endpoint will show post details with all feedback and recommendations',
-      expectedRequest: {
-        postName: 'string'
+    // Validate postId format
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+      return res.status(400).json({
+        message: 'Invalid post ID format'
+      });
+    }
+
+    // Find post by ID and populate creator info
+    const post = await Post.findById(postId)
+      .populate('userId', 'Name role');
+
+    if (!post) {
+      return res.status(404).json({
+        message: 'Post not found',
+        postId: postId
+      });
+    }
+
+    // Find all feedback for this post
+    const feedbacks = await Feedback.find({ postId: post._id })
+      .populate('userId', 'Name')
+      .sort({ createdAt: -1 }); // Newest first
+
+    // Format feedback array
+    const formattedFeedbacks = feedbacks.map(feedback => ({
+      feedbackId: feedback._id,
+      userId: feedback.userId._id,
+      userName: feedback.userId.Name,
+      like: feedback.like,
+      description: feedback.description,
+      createdAt: feedback.createdAt
+    }));
+
+    // Build complete response
+    res.status(200).json({
+      postId: post._id,
+      postName: post.name,
+      description: post.description,
+      photo: post.photo,
+      creator: {
+        userId: post.userId._id,
+        Name: post.userId.Name,
+        role: post.userId.role
       },
-      expectedResponse: {
-        postId: 'string',
-        postName: 'string',
-        description: 'string',
-        photo: 'string',
-        creator: 'object',
-        feedbacks: [
-          {
-            feedbackId: 'string',
-            userId: 'string',
-            userName: 'string',
-            like: 'boolean',
-            createdAt: 'date'
-          }
-        ],
-        likesCount: 'number',
-        dislikesCount: 'number',
-        recommendations: 'array (to be defined)'
-      }
+      feedbacks: formattedFeedbacks,
+      likesCount: post.likesCount,
+      dislikesCount: post.dislikesCount,
+      recommendations: [] // Empty array for future implementation
     });
   } catch (error) {
     console.error('View post error:', error);

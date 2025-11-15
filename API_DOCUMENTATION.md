@@ -11,8 +11,10 @@ Base URL: `http://localhost:3000`
   - [Get Current User](#get-current-user)
 - [Post Endpoints](#post-endpoints)
   - [Create Post](#create-post)
+  - [Get All Posts](#get-all-posts)
+  - [Search Posts](#search-posts)
   - [Give Feedback](#give-feedback)
-  - [View Post (Placeholder)](#view-post-placeholder)
+  - [View Post](#view-post)
 - [User Endpoints](#user-endpoints)
   - [Create User (Legacy)](#create-user-legacy)
   - [Get All Users](#get-all-users)
@@ -470,6 +472,170 @@ curl -X POST http://localhost:3000/api/posts \
 
 ---
 
+### Get All Posts
+
+Retrieve all posts with basic information and feedback counts (no detailed feedback). Use this endpoint to display posts in a list or grid view.
+
+**Endpoint:** `GET /api/posts`
+
+**Access:** Private (Requires Authentication)
+
+**Request Headers:**
+```
+Authorization: Bearer <accessToken>
+```
+
+**Success Response (200 OK):**
+```json
+{
+  "message": "Posts retrieved successfully",
+  "count": 3,
+  "posts": [
+    {
+      "postId": "673f5ac123456789abc",
+      "name": "Summer Fashion 2024",
+      "description": "Latest summer fashion trends featuring...",
+      "photo": "uploads/posts/1731667893362-673d4eb555065106.jpg",
+      "creator": {
+        "userId": "673d4eb555065106e56ec4d",
+        "Name": "John Doe",
+        "role": "Influencer"
+      },
+      "likesCount": 15,
+      "dislikesCount": 3,
+      "createdAt": "2025-11-15T10:58:13.362Z"
+    },
+    {
+      "postId": "673f6bc234567890def",
+      "name": "Winter Collection 2025",
+      "description": "Cozy winter outfits...",
+      "photo": null,
+      "creator": {
+        "userId": "673d5ab123456789xyz",
+        "Name": "Jane Smith",
+        "role": "Recommender"
+      },
+      "likesCount": 8,
+      "dislikesCount": 1,
+      "createdAt": "2025-11-15T11:30:00.000Z"
+    }
+  ]
+}
+```
+
+**Response Fields:**
+- `count`: Total number of posts
+- `posts`: Array of post objects with:
+  - Basic post info (postId, name, description, photo)
+  - Creator information (userId, Name, role)
+  - Feedback counts ONLY (no detailed feedback)
+  - Creation timestamp
+
+**Error Responses:**
+
+**401 Unauthorized - No Token:**
+```json
+{
+  "message": "Not authorized, no token provided"
+}
+```
+
+**Example cURL:**
+```bash
+curl -X GET http://localhost:3000/api/posts \
+  -H "Authorization: Bearer eyJhbGc..."
+```
+
+**Use Case:**
+- Frontend loads this endpoint on page load
+- Displays posts in list/grid view with like/dislike counts
+- User can click on a post or search for specific posts
+- Then call View Post endpoint for detailed feedback
+
+---
+
+### Search Posts
+
+Search for posts by name (case-insensitive partial matching). Returns postId and name for frontend to fetch detailed view.
+
+**Endpoint:** `GET /api/posts/search`
+
+**Access:** Private (Requires Authentication)
+
+**Request Headers:**
+```
+Authorization: Bearer <accessToken>
+```
+
+**Query Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| name | String | Yes | Search term for post name (partial match) |
+
+**Example URL:**
+```
+GET /api/posts/search?name=Summer
+GET /api/posts/search?name=fashion
+```
+
+**Success Response (200 OK):**
+```json
+{
+  "message": "Search completed",
+  "count": 2,
+  "results": [
+    {
+      "postId": "673f5ac123456789abc",
+      "name": "Summer Fashion 2024"
+    },
+    {
+      "postId": "673f7cd345678901ghi",
+      "name": "Summer Collection 2025"
+    }
+  ]
+}
+```
+
+**Response Fields:**
+- `count`: Number of matching posts
+- `results`: Array with postId and name only
+- Returns empty array if no matches found
+
+**Frontend Flow:**
+1. User types in search bar → "summer"
+2. Call `GET /api/posts/search?name=summer`
+3. Get postId from results
+4. Call `GET /api/posts/view/:postId` with the postId to show details
+
+**Error Responses:**
+
+**400 Bad Request - Missing Parameter:**
+```json
+{
+  "message": "Search parameter \"name\" is required"
+}
+```
+
+**401 Unauthorized - No Token:**
+```json
+{
+  "message": "Not authorized, no token provided"
+}
+```
+
+**Example cURL:**
+```bash
+curl -X GET "http://localhost:3000/api/posts/search?name=Summer" \
+  -H "Authorization: Bearer eyJhbGc..."
+```
+
+**Search Features:**
+- Case-insensitive matching (Summer = summer = SUMMER)
+- Partial matching (searching "sum" matches "Summer Fashion 2024")
+- Returns all matching posts, sorted by relevance
+
+---
+
 ### Give Feedback
 
 Give thumbs up (👍) or thumbs down (👎) feedback on a post. Users can create new feedback or update existing feedback. Only one feedback per user per post is allowed.
@@ -594,29 +760,35 @@ curl -X POST http://localhost:3000/api/posts/feedback \
 
 ---
 
-### View Post (Placeholder)
+### View Post
 
-**⚠️ COMING SOON:** This endpoint is currently a placeholder and will be implemented in a future update.
+View detailed post information with ALL feedback and descriptions. This endpoint shows the complete post details including every user's feedback.
 
-View a post with all its feedback and recommendations.
-
-**Endpoint:** `GET /api/posts/view`
+**Endpoint:** `GET /api/posts/view/:postId`
 
 **Access:** Private (Requires Authentication)
 
-**Planned Request Body:**
-```json
-{
-  "postName": "Summer Fashion 2024"
-}
+**Request Headers:**
+```
+Authorization: Bearer <accessToken>
 ```
 
-**Planned Response:**
+**Path Parameters:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| postId | String | Yes | MongoDB ObjectId of the post (24 hex characters) |
+
+**Example URL:**
+```
+GET /api/posts/view/673f5ac123456789abc
+```
+
+**Success Response (200 OK):**
 ```json
 {
   "postId": "673f5ac123456789abc",
   "postName": "Summer Fashion 2024",
-  "description": "Latest summer fashion trends...",
+  "description": "Latest summer fashion trends featuring lightweight fabrics and vibrant colors",
   "photo": "uploads/posts/1731667893362-673d4eb.jpg",
   "creator": {
     "userId": "673d4eb555065106e56ec4d",
@@ -629,36 +801,86 @@ View a post with all its feedback and recommendations.
       "userId": "673d5ab123456789xyz",
       "userName": "Jane Smith",
       "like": true,
-      "createdAt": "2025-11-15T11:15:30.000Z"
+      "description": "Love this style! Perfect for summer",
+      "createdAt": "2025-11-15T12:30:00.000Z"
+    },
+    {
+      "feedbackId": "673f7cd345678901ghi",
+      "userId": "673d8ef456789012jkl",
+      "userName": "Bob Wilson",
+      "like": false,
+      "description": "Not my preferred style",
+      "createdAt": "2025-11-15T13:45:00.000Z"
     }
   ],
-  "likesCount": 5,
-  "dislikesCount": 2,
+  "likesCount": 15,
+  "dislikesCount": 3,
   "recommendations": []
 }
 ```
 
-**Current Response (501 Not Implemented):**
+**Response Fields:**
+- `postId`, `postName`, `description`, `photo`: Basic post information
+- `creator`: User who created the post (userId, Name, role)
+- `feedbacks`: Array of ALL feedback with:
+  - `feedbackId`, `userId`, `userName`: Feedback and user info
+  - `like`: true (👍) or false (👎)
+  - `description`: User's feedback text (may be null/empty)
+  - `createdAt`: When feedback was given
+- `likesCount`, `dislikesCount`: Total counts
+- `recommendations`: Empty array (reserved for future implementation)
+
+**Frontend Access Paths:**
+
+**Path 1 - From Search:**
+```
+1. User searches → GET /api/posts/search?name=Summer
+2. Get postId from search results
+3. Call GET /api/posts/view/:postId with the postId
+```
+
+**Path 2 - From List:**
+```
+1. Frontend loads → GET /api/posts (shows all posts)
+2. User clicks a post → already has postId
+3. Call GET /api/posts/view/:postId
+```
+
+**Error Responses:**
+
+**400 Bad Request - Invalid ID Format:**
 ```json
 {
-  "message": "View post feature coming soon",
-  "note": "This endpoint will show post details with all feedback and recommendations",
-  "expectedRequest": {
-    "postName": "string"
-  },
-  "expectedResponse": {
-    "postId": "string",
-    "postName": "string",
-    "description": "string",
-    "photo": "string",
-    "creator": "object",
-    "feedbacks": "array",
-    "likesCount": "number",
-    "dislikesCount": "number",
-    "recommendations": "array (to be defined)"
-  }
+  "message": "Invalid post ID format"
 }
 ```
+
+**401 Unauthorized - No Token:**
+```json
+{
+  "message": "Not authorized, no token provided"
+}
+```
+
+**404 Not Found - Post Doesn't Exist:**
+```json
+{
+  "message": "Post not found",
+  "postId": "673f5ac123456789999"
+}
+```
+
+**Example cURL:**
+```bash
+curl -X GET http://localhost:3000/api/posts/view/673f5ac123456789abc \
+  -H "Authorization: Bearer eyJhbGc..."
+```
+
+**Notes:**
+- Feedbacks are sorted by creation date (newest first)
+- Empty feedback array means no one has given feedback yet
+- Recommendations array is empty for now (future feature)
+- Photo field is null if post was created without a photo
 
 ---
 

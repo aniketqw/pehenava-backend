@@ -5,6 +5,8 @@ const { protect } = require('../middleware/auth.middleware');
 const { validateFeedback } = require('../middleware/validation.middleware');
 const upload = require('../middleware/upload.middleware');
 
+// ==================== POST ROUTES ====================
+
 /**
  * @route   POST /api/posts
  * @desc    Create a new post with optional photo
@@ -29,16 +31,40 @@ router.post(
   postController.giveFeedback
 );
 
+// ==================== GET ROUTES ====================
+// Note: Order matters! Specific routes (/search) must come before parameterized routes (/:postId)
+
 /**
- * @route   GET /api/posts/view
- * @desc    View post with all feedback and recommendations
+ * @route   GET /api/posts/search
+ * @desc    Search posts by name
  * @access  Private (requires authentication)
- * @status  PLACEHOLDER - Returns 501 Not Implemented
  */
 router.get(
-  '/view',
+  '/search',
+  protect,
+  postController.searchPosts
+);
+
+/**
+ * @route   GET /api/posts/view/:postId
+ * @desc    View specific post with all feedback and recommendations
+ * @access  Private (requires authentication)
+ */
+router.get(
+  '/view/:postId',
   protect,
   postController.viewPost
+);
+
+/**
+ * @route   GET /api/posts
+ * @desc    Get all posts with basic info and counts
+ * @access  Private (requires authentication)
+ */
+router.get(
+  '/',
+  protect,
+  postController.getAllPosts
 );
 
 module.exports = router;
