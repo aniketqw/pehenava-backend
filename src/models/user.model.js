@@ -8,8 +8,9 @@ const userSchema = new mongoose.Schema({
     type: String, 
     required: true, 
     unique: true },
-  tag:{
+  role:{
     type:String,
+    enum:['Influencer','Recommender','Explorer'],
     required:true},
   password: { 
     type: String,
