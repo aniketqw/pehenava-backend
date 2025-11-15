@@ -16,6 +16,9 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true }, // Stored hashed automatically via pre-save hook
+  refreshTokens: [{
+    type: String
+  }], // Store refresh tokens for logout functionality
   createdAt: {
     type: Date,
     default: Date.now },
@@ -23,7 +26,7 @@ const userSchema = new mongoose.Schema({
 
 // Pre-save hook to hash password before saving to database
 userSchema.pre('save', async function(next) {
-  // Only hash the password if it has been modified (or is new)
+  // Only hash the password if it has been modified (or is new) this prevent rehashing of the function 
   if (!this.isModified('password')) {
     return next();
   }
