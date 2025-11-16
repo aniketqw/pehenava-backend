@@ -1,9 +1,0 @@
-[00:00:00.694] Server  LOG      ✓ Ready in 520ms
-[00:00:44.666] Browser WARN    Image with src "/background-login.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:57.417] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:57.753] Browser WARN    Image with src "/background-login.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-[00:00:57.753] Browser WARN    Image with src "/background-login.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:01:07.582] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:12.122] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763289475/pehenava/posts/1763289475923-6919a68e4e7154d478674519-image.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading

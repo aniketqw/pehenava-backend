@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 17, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/taru/FindMyProf/find-my-prof/app/professor/dashboard/page.tsx"],"sourcesContent":["{/* Top Navigation Bar */}\r\n<nav className=\"bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4 shadow-md flex justify-between items-center\">\r\n  <h1 className=\"text-xl font-bold\">ProfConnect</h1>\r\n\r\n  <div className=\"flex gap-3\">\r\n    <button\r\n      onClick={() => (window.location.href = \"/\")}\r\n      className=\"bg-white text-indigo-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition\"\r\n    >\r\n      Home\r\n    </button>\r\n\r\n    <button\r\n      onClick={() => {\r\n        localStorage.removeItem(\"token\");\r\n        window.location.href = \"/\";\r\n      }}\r\n      className=\"bg-white text-indigo-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition\"\r\n    >\r\n      Logout\r\n    </button>\r\n  </div>\r\n</nav>\r\n"],"names":[],"mappings":";AAAA,CAAyB,eACzB,QAAC;IAAI,WAAU;;sBACb,QAAC;YAAG,WAAU;sBAAoB;;;;;;sBAElC,QAAC;YAAI,WAAU;;8BACb,QAAC;oBACC,SAAS,IAAO,OAAO,QAAQ,CAAC,IAAI,GAAG;oBACvC,WAAU;8BACX;;;;;;8BAID,QAAC;oBACC,SAAS;wBACP,aAAa,UAAU,CAAC;wBACxB,OAAO,QAAQ,CAAC,IAAI,GAAG;oBACzB;oBACA,WAAU;8BACX","debugId":null}}]
-}
