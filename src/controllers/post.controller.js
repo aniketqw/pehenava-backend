@@ -288,7 +288,7 @@ exports.updatePost = async (req, res) => {
 };
 
 /**
- * @desc    Get all posts with basic info and counts
+ * @desc    Get all posts with complete feedback details
  * @route   GET /api/posts
  * @access  Private (requires authentication)
  */
@@ -299,21 +299,40 @@ exports.getAllPosts = async (req, res) => {
       .populate('userId', 'Name role') // Populate creator info (exclude email for privacy)
       .sort({ createdAt: -1 }); // Newest first
 
-    // Format response - include counts but NOT feedback details
-    const formattedPosts = posts.map(post => ({
-      postId: post._id,
-      name: post.name,
-      description: post.description,
-      photo: post.photo,
-      creator: {
-        userId: post.userId._id,
-        Name: post.userId.Name,
-        role: post.userId.role
-      },
-      likesCount: post.likesCount,
-      dislikesCount: post.dislikesCount,
-      createdAt: post.createdAt
-    }));
+    // Fetch feedbacks for all posts in parallel using Promise.all
+    const formattedPosts = await Promise.all(
+      posts.map(async (post) => {
+        // Get all feedbacks for this post
+        const feedbacks = await Feedback.find({ postId: post._id })
+          .populate('userId', 'Name')
+          .sort({ createdAt: -1 }); // Newest feedback first
+
+        // Format feedbacks array (without feedbackId for consistency)
+        const formattedFeedbacks = feedbacks.map(feedback => ({
+          userId: feedback.userId._id,
+          userName: feedback.userId.Name,
+          like: feedback.like,
+          description: feedback.description,
+          createdAt: feedback.createdAt
+        }));
+
+        return {
+          postId: post._id,
+          name: post.name,
+          description: post.description,
+          photo: post.photo,
+          creator: {
+            userId: post.userId._id,
+            Name: post.userId.Name,
+            role: post.userId.role
+          },
+          feedbacks: formattedFeedbacks, // Complete feedback array
+          likesCount: post.likesCount,
+          dislikesCount: post.dislikesCount,
+          createdAt: post.createdAt
+        };
+      })
+    );
 
     res.status(200).json({
       message: 'Posts retrieved successfully',
@@ -462,9 +481,8 @@ exports.viewPostByName = async (req, res) => {
       .populate('userId', 'Name')
       .sort({ createdAt: -1 }); // Newest first
 
-    // Format feedback array
+    // Format feedback array (feedbackId removed as per requirement)
     const formattedFeedbacks = feedbacks.map(feedback => ({
-      feedbackId: feedback._id,
       userId: feedback.userId._id,
       userName: feedback.userId.Name,
       like: feedback.like,
