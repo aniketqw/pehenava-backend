@@ -31,81 +31,6 @@
 
 ---
 
-## Cloudinary Image Storage
-
-All post images are stored on **Cloudinary CDN** for optimal performance, automatic optimization, and global content delivery.
-
-### **Image URLs Format**
-
-Images are returned as full HTTPS URLs:
-```
-https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/1732123456-userId-filename.jpg
-```
-
-### **Automatic Optimizations**
-
-When you upload an image, Cloudinary automatically:
-- ✅ **Resizes** to max 1200x1200px (maintains aspect ratio)
-- ✅ **Optimizes quality** - Reduces file size while maintaining visual quality
-- ✅ **Converts format** - Serves WebP to supported browsers, JPEG to others
-- ✅ **CDN Delivery** - Serves from nearest edge server for fast loading
-
-### **On-the-Fly Transformations**
-
-You can transform any image URL by adding parameters. Simply modify the URL path:
-
-**Original URL:**
-```
-https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/image.jpg
-```
-
-**Resize to 300x300 (crop-to-fill):**
-```
-https://res.cloudinary.com/dhfdccotv/image/upload/w_300,h_300,c_fill/v1732123456/pehenava/posts/image.jpg
-```
-
-**Resize to 500px width (maintain aspect ratio):**
-```
-https://res.cloudinary.com/dhfdccotv/image/upload/w_500/v1732123456/pehenava/posts/image.jpg
-```
-
-**Apply grayscale effect:**
-```
-https://res.cloudinary.com/dhfdccotv/image/upload/e_grayscale/v1732123456/pehenava/posts/image.jpg
-```
-
-### **Common Transformations**
-
-| Transformation | Parameter | Example |
-|----------------|-----------|---------|
-| Width | `w_500` | Resize to 500px wide |
-| Height | `h_500` | Resize to 500px tall |
-| Crop | `c_fill` | Crop to fill dimensions |
-| Quality | `q_80` | Set quality to 80% |
-| Format | `f_webp` | Convert to WebP format |
-| Grayscale | `e_grayscale` | Apply grayscale effect |
-| Blur | `e_blur:300` | Apply blur effect |
-
-**Combining transformations:**
-```
-https://res.cloudinary.com/dhfdccotv/image/upload/w_400,h_400,c_fill,q_auto,f_auto/v1732123456/pehenava/posts/image.jpg
-```
-This creates a 400x400 thumbnail with automatic quality and format optimization.
-
-### **Benefits**
-
-- 🚀 **Fast Loading** - Global CDN with edge caching
-- 📱 **Responsive Images** - Generate any size on-demand
-- 💾 **Storage Savings** - Automatic compression reduces bandwidth
-- 🔒 **Secure** - HTTPS delivery for all images
-- ♻️ **Auto Cleanup** - Old photos deleted when posts are updated
-
-### **Migration Note**
-
-> **Important:** If you have existing posts with local file paths (e.g., `uploads/posts/...`), these will no longer work. All new uploads now return Cloudinary URLs. You may need to re-upload old images or implement a migration script.
-
----
-
 ## Authentication Endpoints
 
 ### Register User
@@ -124,8 +49,8 @@ Content-Type: application/json
 **Request Body:**
 ```json
 {
-  "Name": "John Doe",
-  "email": "john@example.com",
+  "Name": "Alankrit Sinha",
+  "email": "alankrit@student.com",
   "password": "SecurePass123",
   "role": "Influencer"
 }
@@ -147,8 +72,8 @@ Content-Type: application/json
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "user": {
     "_id": "673d4eb555065106...",
-    "Name": "John Doe",
-    "email": "john@example.com",
+    "Name": "Alankrit Sinha",
+    "email": "alankrit@student.com",
     "role": "Influencer",
     "createdAt": "2025-11-15T09:58:13.362Z"
   }
@@ -187,7 +112,7 @@ curl -X POST http://localhost:3000/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "Name": "John Doe",
-    "email": "john@example.com",
+    "email": "alankrit@student.com",
     "password": "SecurePass123",
     "role": "Influencer"
   }'
@@ -211,7 +136,7 @@ Content-Type: application/json
 **Request Body:**
 ```json
 {
-  "email": "john@example.com",
+  "email": "alankrit@student.com",
   "password": "SecurePass123"
 }
 ```
@@ -230,8 +155,8 @@ Content-Type: application/json
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "user": {
     "_id": "673d4eb555065106...",
-    "Name": "John Doe",
-    "email": "john@example.com",
+    "Name": "Alankrit Sinha",
+    "email": "alankrit@student.com",
     "role": "Influencer",
     "createdAt": "2025-11-15T09:58:13.362Z"
   }
@@ -265,7 +190,7 @@ Content-Type: application/json
 curl -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "john@example.com",
+    "email": "alankrit@student.com,
     "password": "SecurePass123"
   }'
 ```
@@ -415,8 +340,8 @@ Authorization: Bearer <accessToken>
 {
   "user": {
     "_id": "673d4eb555065106...",
-    "Name": "John Doe",
-    "email": "john@example.com",
+    "Name": "Alankrit Sinha",
+    "email": "alankrit@student.com",
     "role": "Influencer",
     "createdAt": "2025-11-15T09:58:13.362Z"
   }
@@ -495,8 +420,8 @@ Content-Type: multipart/form-data
     "photo": "https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/1732123456-673d4eb555065106-summer-fashion.jpg",
     "creator": {
       "userId": "673d4eb555065106e56ec4d",
-      "Name": "John Doe",
-      "email": "john@example.com",
+      "Name": "Alankrit Sinha",
+      "email": "alankrit@student.com",
       "role": "Influencer"
     },
     "likesCount": 0,
@@ -596,7 +521,7 @@ Content-Type: multipart/form-data
     "creator": {
       "userId": "673d4eb555065106e56ec4d",
       "Name": "John Doe",
-      "email": "john@example.com",
+      "email": "alankrit@student.com",
       "role": "Influencer"
     },
     "likesCount": 5,
@@ -685,9 +610,9 @@ curl -X PUT http://localhost:3000/api/posts/673f5ac123456789abc \
 **Important Notes:**
 - **Name cannot be updated** (it's a unique identifier)
 - Only the post creator can update their own post
-- When uploading a new photo, the old photo is automatically deleted from Cloudinary to save storage space
+- When uploading a new photo, the old photo is automatically deleted from the database
 - At least one field must be provided (description or photo)
-- Post's like/dislike counts are preserved during update
+- Post's like/dislike counts do not change during updates
 
 ---
 
@@ -717,20 +642,20 @@ Authorization: Bearer <accessToken>
       "photo": "https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/1732123456-673d4eb555065106-summer.jpg",
       "creator": {
         "userId": "673d4eb555065106e56ec4d",
-        "Name": "John Doe",
+        "Name": "Alankrit Sinha",
         "role": "Influencer"
       },
       "feedbacks": [
         {
           "userId": "673d5ab123456789xyz",
-          "userName": "Jane Smith",
+          "userName": "Ajay",
           "like": true,
           "description": "Love this style! Perfect for summer",
           "createdAt": "2025-11-15T12:30:00.000Z"
         },
         {
           "userId": "673d8ef456789012jkl",
-          "userName": "Bob Wilson",
+          "userName": "Siddharth",
           "like": false,
           "description": "Not my preferred style",
           "createdAt": "2025-11-15T13:45:00.000Z"
@@ -747,7 +672,7 @@ Authorization: Bearer <accessToken>
       "photo": null,
       "creator": {
         "userId": "673d5ab123456789xyz",
-        "Name": "Jane Smith",
+        "Name": "Ajay",
         "role": "Recommender"
       },
       "feedbacks": [],
@@ -881,7 +806,7 @@ curl -X GET "http://localhost:3000/api/posts/search?name=Summer" \
 
 ### Give Feedback
 
-Give thumbs up (👍) or thumbs down (👎) feedback on a post. Users can create new feedback or update existing feedback. Only one feedback per user per post is allowed.
+Users can give likes to posts. Users can create new feedback or update existing feedback. Only one feedback per user per post is allowed.
 
 **Endpoint:** `POST /api/posts/feedback`
 
@@ -906,7 +831,7 @@ Content-Type: application/json
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | postName | String | Yes | Name of the post to give feedback on (min 1 character) |
-| like | Boolean | Yes | true = 👍 thumbs up, false = 👎 thumbs down |
+| like | Boolean | Yes | true = boolean|
 | description | String | No | Optional feedback text (max 500 characters) |
 
 > **Note:** The `description` field is properly persisted to the database and will be visible in all feedback queries (View Post, View Post by Name, etc.).
@@ -933,15 +858,8 @@ This single endpoint intelligently handles **both creating new feedback and upda
    - **Action:** UPDATE existing feedback
    - **Response:** `200 OK`
    - **Post Count Logic:**
-     - If `like` value **changed** (👍→👎 or 👎→👍): Decrement old count, increment new count
+     - If `like` value **changed** : Decrement old count, increment new count
      - If `like` value **same**: No count changes, only update description
-
-### **Why This Design?**
-
-- ✅ **One user = One feedback per post** - Prevents spam
-- ✅ **Simpler frontend** - No need to track if feedback exists
-- ✅ **Atomic operations** - No race conditions
-- ✅ **Idempotent** - Safe to call multiple times
 
 ### **Example Flow:**
 
@@ -963,7 +881,7 @@ User Alice on "Summer Fashion 2024":
 **Success Response - New Feedback (201 Created):**
 ```json
 {
-  "message": "Feedback submitted successfully: 👍 Thumbs up",
+  "message": "Feedback submitted successfully",
   "feedback": {
     "feedbackId": "673f6bc234567890def",
     "postId": "673f5ac123456789abc",
@@ -983,7 +901,7 @@ User Alice on "Summer Fashion 2024":
 **Success Response - Updated Feedback (200 OK):**
 ```json
 {
-  "message": "Feedback updated from 👍 to 👎",
+  "message": "Feedback updated",
   "feedback": {
     "feedbackId": "673f6bc234567890def",
     "postId": "673f5ac123456789abc",
@@ -1046,12 +964,6 @@ curl -X POST http://localhost:3000/api/posts/feedback \
   -d '{"postName": "Summer Fashion 2024", "like": false}'
 ```
 
-**Feedback Update Behavior:**
-- **New Feedback**: Creates new feedback document, increments likesCount or dislikesCount
-- **Same Vote**: Updates description only, counts unchanged
-- **Changed Vote (👍→👎 or 👎→👍)**: Updates feedback, decrements old count, increments new count
-- **Idempotent**: Sending same feedback multiple times is safe
-
 ---
 
 ### View Post
@@ -1086,14 +998,14 @@ GET /api/posts/view/673f5ac123456789abc
   "photo": "https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/1732123456-673d4eb-summer.jpg",
   "creator": {
     "userId": "673d4eb555065106e56ec4d",
-    "Name": "John Doe",
+    "Name": "Alankrit Sinha",
     "role": "Influencer"
   },
   "feedbacks": [
     {
       "feedbackId": "673f6bc234567890def",
       "userId": "673d5ab123456789xyz",
-      "userName": "Jane Smith",
+      "userName": "Ajay",
       "like": true,
       "description": "Love this style! Perfect for summer",
       "createdAt": "2025-11-15T12:30:00.000Z"
@@ -1101,7 +1013,7 @@ GET /api/posts/view/673f5ac123456789abc
     {
       "feedbackId": "673f7cd345678901ghi",
       "userId": "673d8ef456789012jkl",
-      "userName": "Bob Wilson",
+      "userName": "Siddharth",
       "like": false,
       "description": "Not my preferred style",
       "createdAt": "2025-11-15T13:45:00.000Z"
@@ -1112,513 +1024,3 @@ GET /api/posts/view/673f5ac123456789abc
   "recommendations": []
 }
 ```
-
-**Response Fields:**
-- `postId`, `postName`, `description`, `photo`: Basic post information
-- `creator`: User who created the post (userId, Name, role)
-- `feedbacks`: Array of ALL feedback with:
-  - `feedbackId`, `userId`, `userName`: Feedback and user info
-  - `like`: true (👍) or false (👎)
-  - `description`: User's feedback text (may be null/empty)
-  - `createdAt`: When feedback was given
-- `likesCount`, `dislikesCount`: Total counts
-- `recommendations`: Empty array (reserved for future implementation)
-
-**Frontend Access Paths:**
-
-**Path 1 - From Search:**
-```
-1. User searches → GET /api/posts/search?name=Summer
-2. Get postId from search results
-3. Call GET /api/posts/view/:postId with the postId
-```
-
-**Path 2 - From List:**
-```
-1. Frontend loads → GET /api/posts (shows all posts)
-2. User clicks a post → already has postId
-3. Call GET /api/posts/view/:postId
-```
-
-**Error Responses:**
-
-**400 Bad Request - Invalid ID Format:**
-```json
-{
-  "message": "Invalid post ID format"
-}
-```
-
-**401 Unauthorized - No Token:**
-```json
-{
-  "message": "Not authorized, no token provided"
-}
-```
-
-**404 Not Found - Post Doesn't Exist:**
-```json
-{
-  "message": "Post not found",
-  "postId": "673f5ac123456789999"
-}
-```
-
-**Example cURL:**
-```bash
-curl -X GET http://localhost:3000/api/posts/view/673f5ac123456789abc \
-  -H "Authorization: Bearer eyJhbGc..."
-```
-
-**Notes:**
-- Feedbacks are sorted by creation date (newest first)
-- Empty feedback array means no one has given feedback yet
-- Recommendations array is empty for now (future feature)
-- Photo field is null if post was created without a photo
-
----
-
-### View Post by Name
-
-View detailed post information with ALL feedback by searching with the exact post name. This is a convenience endpoint that combines search and view in a single request.
-
-**Endpoint:** `GET /api/posts/view/by-name`
-
-**Access:** Private (Requires Authentication)
-
-**Request Headers:**
-```
-Authorization: Bearer <accessToken>
-```
-
-**Query Parameters:**
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| name | String | Yes | Exact post name (case-insensitive) |
-
-**Example URLs:**
-```
-GET /api/posts/view/by-name?name=Summer Fashion 2024
-GET /api/posts/view/by-name?name=summer fashion 2024
-```
-
-**Success Response (200 OK):**
-```json
-{
-  "postId": "673f5ac123456789abc",
-  "postName": "Summer Fashion 2024",
-  "description": "Latest summer fashion trends featuring lightweight fabrics and vibrant colors",
-  "photo": "https://res.cloudinary.com/dhfdccotv/image/upload/v1732123456/pehenava/posts/1732123456-673d4eb-summer.jpg",
-  "creator": {
-    "userId": "673d4eb555065106e56ec4d",
-    "Name": "John Doe",
-    "role": "Influencer"
-  },
-  "feedbacks": [
-    {
-      "userId": "673d5ab123456789xyz",
-      "userName": "Jane Smith",
-      "like": true,
-      "description": "Love this style! Perfect for summer",
-      "createdAt": "2025-11-15T12:30:00.000Z"
-    }
-  ],
-  "likesCount": 15,
-  "dislikesCount": 3,
-  "recommendations": []
-}
-```
-
-**Response Format:**
-Returns complete post details with all feedback. Feedback objects include `description` field (properly persisted to database). Note: `feedbackId` is not included in feedback objects.
-
-**Error Responses:**
-
-**400 Bad Request - Missing Name:**
-```json
-{
-  "message": "Search parameter \"name\" is required"
-}
-```
-
-**401 Unauthorized - No Token:**
-```json
-{
-  "message": "Not authorized, no token provided"
-}
-```
-
-**404 Not Found - Post Doesn't Exist:**
-```json
-{
-  "message": "Post not found",
-  "searchedName": "Non-Existent Post"
-}
-```
-
-**Example cURL:**
-```bash
-curl -X GET "http://localhost:3000/api/posts/view/by-name?name=Summer%20Fashion%202024" \
-  -H "Authorization: Bearer eyJhbGc..."
-```
-
-**Use Cases:**
-- **Single API call**: Get complete post details by name without first searching for ID
-- **Simplified frontend logic**: No need for two-step process (search → view)
-- **Faster response**: One round trip instead of two
-- **Known post names**: When you know the exact post name (e.g., from URL parameter)
-
-**Comparison with Alternatives:**
-
-**Option 1: View Post by Name (This Endpoint)**
-```javascript
-// Single API call
-GET /api/posts/view/by-name?name=Summer Fashion 2024
-// Returns: Complete post with all feedback
-```
-✅ Simple, fast, one request
-
-**Option 2: Search + View (Two Steps)**
-```javascript
-// Step 1: Search
-GET /api/posts/search?name=Summer Fashion 2024
-// Returns: [{ postId: "abc...", name: "Summer Fashion 2024" }]
-
-// Step 2: View
-GET /api/posts/view/abc...
-// Returns: Complete post with all feedback
-```
-❌ More complex, two requests, slower
-
-**Important Notes:**
-- **Exact match required**: Name must match exactly (case-insensitive)
-  - "Summer Fashion 2024" ✓
-  - "summer fashion 2024" ✓
-  - "Summer" ❌ (partial match not supported)
-- **Case-insensitive**: Matching ignores case differences
-- **Response format**: Identical to View Post endpoint for consistency
-- **URL encoding**: Remember to encode spaces and special characters in the query string
-
----
-
-## User Endpoints
-
-### Create User (Legacy)
-
-**⚠️ DEPRECATED:** Use `/api/auth/register` instead. This endpoint is kept for backward compatibility.
-
-Create a new user without authentication (no JWT tokens returned).
-
-**Endpoint:** `POST /api/users`
-
-**Access:** Public
-
-**Request Headers:**
-```
-Content-Type: application/json
-```
-
-**Request Body:**
-```json
-{
-  "Name": "Jane Smith",
-  "email": "jane@example.com",
-  "password": "SecurePass456",
-  "role": "Recommender"
-}
-```
-
-**Success Response (201 Created):**
-```json
-{
-  "message": "User created",
-  "userId": "673d4eb555065106...",
-  "user": {
-    "Name": "Jane Smith",
-    "email": "jane@example.com",
-    "role": "Recommender",
-    "createdAt": "2025-11-15T10:30:45.123Z"
-  }
-}
-```
-
-**Error Responses:**
-
-**400 Bad Request - Missing Fields:**
-```json
-{
-  "message": "Name, email , tag, and password are required"
-}
-```
-
-**400 Bad Request - Invalid Role:**
-```json
-{
-  "message": "Invalid roles . Allowed Roles: Influencer,Recommender,Explorer"
-}
-```
-
-**409 Conflict:**
-```json
-{
-  "message": "User already exists"
-}
-```
-
-**Example cURL:**
-```bash
-curl -X POST http://localhost:3000/api/users \
-  -H "Content-Type: application/json" \
-  -d '{
-    "Name": "Jane Smith",
-    "email": "jane@example.com",
-    "password": "SecurePass456",
-    "role": "Recommender"
-  }'
-```
-
----
-
-### Get All Users
-
-Retrieve all users from the database (passwords excluded).
-
-**Endpoint:** `GET /api/users`
-
-**Access:** Public
-
-**Request Headers:**
-```
-None required
-```
-
-**Success Response (200 OK):**
-```json
-[
-  {
-    "_id": "673d4eb555065106...",
-    "Name": "John Doe",
-    "email": "john@example.com",
-    "role": "Influencer",
-    "createdAt": "2025-11-15T09:58:13.362Z",
-    "__v": 0
-  },
-  {
-    "_id": "673d5ab123456789...",
-    "Name": "Jane Smith",
-    "email": "jane@example.com",
-    "role": "Recommender",
-    "createdAt": "2025-11-15T10:30:45.123Z",
-    "__v": 0
-  }
-]
-```
-
-**Error Responses:**
-
-**500 Internal Server Error:**
-```json
-{
-  "message": "Error message details"
-}
-```
-
-**Example cURL:**
-```bash
-curl -X GET http://localhost:3000/api/users
-```
-
----
-
-## Error Responses
-
-### Common Error Response Format
-
-All error responses follow this structure:
-
-```json
-{
-  "message": "Error description"
-}
-```
-
-For validation errors:
-
-```json
-{
-  "message": "Validation failed",
-  "errors": [
-    {
-      "field": "fieldName",
-      "message": "Error description"
-    }
-  ]
-}
-```
-
----
-
-## Status Codes
-
-| Status Code | Description |
-|-------------|-------------|
-| 200 | OK - Request successful |
-| 201 | Created - Resource created successfully |
-| 400 | Bad Request - Invalid input or validation failed |
-| 401 | Unauthorized - Authentication required or failed |
-| 404 | Not Found - Resource not found |
-| 409 | Conflict - Resource already exists |
-| 500 | Internal Server Error - Server error occurred |
-
----
-
-## Authentication Flow
-
-### 1. Register or Login
-```
-POST /api/auth/register  OR  POST /api/auth/login
-↓
-Receive: { accessToken, refreshToken, user }
-```
-
-### 2. Access Protected Routes
-```
-Use accessToken in Authorization header:
-Authorization: Bearer <accessToken>
-```
-
-### 3. When Access Token Expires
-```
-POST /api/auth/refresh
-Body: { "refreshToken": "<refreshToken>" }
-↓
-Receive: { accessToken }
-```
-
-### 4. Logout
-```
-POST /api/auth/logout
-Headers: Authorization: Bearer <accessToken>
-Body: { "refreshToken": "<refreshToken>" }
-```
-
----
-
-## Token Information
-
-### Access Token
-- **Lifespan:** 1 hour
-- **Usage:** Include in Authorization header for protected routes
-- **Format:** `Bearer <token>`
-- **Storage:** Store in memory or localStorage (frontend)
-
-### Refresh Token
-- **Lifespan:** 7 days
-- **Usage:** Request new access token when current expires
-- **Storage:** Store securely (httpOnly cookie recommended for web apps)
-- **Invalidation:** Removed from database on logout
-
----
-
-## User Roles
-
-The system supports three user roles:
-
-| Role | Description |
-|------|-------------|
-| `Influencer` | User who influences fashion trends |
-| `Recommender` | User who recommends fashion items |
-| `Explorer` | User who explores fashion options |
-
----
-
-## Password Requirements
-
-- Minimum 8 characters
-- At least one uppercase letter (A-Z)
-- At least one lowercase letter (a-z)
-- At least one number (0-9)
-
-**Example Valid Passwords:**
-- `SecurePass123`
-- `MyPassword1`
-- `Fashion2024`
-
-**Example Invalid Passwords:**
-- `short1` (too short)
-- `nouppercase123` (no uppercase)
-- `NOLOWERCASE123` (no lowercase)
-- `NoNumbers` (no numbers)
-
----
-
-## Example Authentication Workflow
-
-### Complete Authentication Example
-
-```bash
-# 1. Register new user
-curl -X POST http://localhost:3000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "Name": "Alice Johnson",
-    "email": "alice@example.com",
-    "password": "AlicePass123",
-    "role": "Explorer"
-  }'
-
-# Response:
-# {
-#   "accessToken": "eyJhbGc...",
-#   "refreshToken": "eyJhbGc...",
-#   "user": { ... }
-# }
-
-# 2. Access protected route with access token
-curl -X GET http://localhost:3000/api/auth/me \
-  -H "Authorization: Bearer eyJhbGc..."
-
-# 3. When access token expires, refresh it
-curl -X POST http://localhost:3000/api/auth/refresh \
-  -H "Content-Type: application/json" \
-  -d '{
-    "refreshToken": "eyJhbGc..."
-  }'
-
-# 4. Logout
-curl -X POST http://localhost:3000/api/auth/logout \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer eyJhbGc..." \
-  -d '{
-    "refreshToken": "eyJhbGc..."
-  }'
-```
-
----
-
-## Security Notes
-
-1. **Always use HTTPS in production** to encrypt tokens in transit
-2. **Never expose JWT secrets** - keep them in environment variables
-3. **Passwords are hashed** using bcrypt with 10 salt rounds
-4. **Tokens are validated** on every protected route request
-5. **Refresh tokens are stored** in the database and can be invalidated
-6. **Security headers** are set using Helmet middleware
-7. **CORS** is enabled for cross-origin requests
-
----
-
-## Rate Limiting
-
-Currently, no rate limiting is implemented. For production, consider:
-- Limiting login attempts (e.g., 5 attempts per 15 minutes)
-- Limiting registration attempts
-- General API rate limiting
-
----
-
-## Support
-
-For issues or questions, please contact the development team or check the project repository.
-
-**Last Updated:** 2025-11-15
