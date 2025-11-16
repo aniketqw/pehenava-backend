@@ -14,7 +14,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // SIMPLE Validation
+  // Validation
   function validate() {
     if (Name.trim().length < 2) {
       setError("Name must be at least 2 characters");
@@ -60,7 +60,7 @@ export default function RegisterPage() {
     try {
       await registerUser(Name, email, password, role);
 
-      // Redirect to login page after successful registration
+      // Redirect to login 
       window.location.href = "/login";
     } catch (err: any) {
       setError(err.message);
@@ -72,7 +72,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 font-[Inter]">
 
-      {/* LEFT: Background Image */}
+      {/* Background Image*/}
       <div className="relative h-64 md:h-auto">
         <Image
           src="/background-register.jpg"
@@ -91,7 +91,7 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* RIGHT: Form */}
+      {/* Right Form */}
       <div className="flex items-center justify-center px-10 py-16 bg-gray-50">
         <div className="w-full max-w-md">
 
@@ -111,7 +111,7 @@ export default function RegisterPage() {
                 value={Name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full mt-1 px-4 py-3 border rounded-xl"
-                placeholder="John Doe"
+                placeholder="Eg. Alankrit Sinha"
                 required
               />
             </div>
@@ -124,7 +124,7 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full mt-1 px-4 py-3 border rounded-xl"
-                placeholder="you@example.com"
+                placeholder="alankritsinha@gmail.com"
                 required
               />
             </div>
@@ -179,3 +179,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+
