@@ -17,6 +17,13 @@ const feedbackSchema = new mongoose.Schema({
     // true = thumbs up (👍)
     // false = thumbs down (👎)
   },
+  description: {
+    type: String,
+    maxlength: 500,
+    trim: true,
+    default: ''
+    // Optional feedback comment/description
+  },
   createdAt: {
     type: Date,
     default: Date.now

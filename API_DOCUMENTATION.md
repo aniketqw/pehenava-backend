@@ -885,6 +885,8 @@ Content-Type: application/json
 | like | Boolean | Yes | true = 👍 thumbs up, false = 👎 thumbs down |
 | description | String | No | Optional feedback text (max 500 characters) |
 
+> **Note:** The `description` field is properly persisted to the database and will be visible in all feedback queries (View Post, View Post by Name, etc.).
+
 ---
 
 ## ⚙️ How This Endpoint Handles Both Creation and Update
@@ -1204,7 +1206,7 @@ GET /api/posts/view/by-name?name=summer fashion 2024
 ```
 
 **Response Format:**
-Returns complete post details with all feedback. Note: `feedbackId` is not included in feedback objects.
+Returns complete post details with all feedback. Feedback objects include `description` field (properly persisted to database). Note: `feedbackId` is not included in feedback objects.
 
 **Error Responses:**
 
