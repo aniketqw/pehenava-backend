@@ -19,9 +19,6 @@ export default function HomeFeed() {
   const [commentInput, setCommentInput] = useState<{
     [postId: string]: string;
   }>({});
-  const [submittedFeedback, setSubmittedFeedback] = useState<{
-    [postId: string]: boolean;
-  }>({});
 
   // Load user + posts
   useEffect(() => {
@@ -100,14 +97,11 @@ export default function HomeFeed() {
 
       setPosts((prev) =>
         prev.map((p) =>
-          p.postId === post.postId ? { ...p, feedbacks: [newFeedback] } : p
+          p.postId === post.postId
+            ? { ...p, feedbacks: [...(p.feedbacks || []), newFeedback] }
+            : p
         )
       );
-
-      setSubmittedFeedback((prev) => ({
-        ...prev,
-        [post.postId]: true,
-      }));
     } catch (err: any) {
       alert(err.message);
     }
@@ -310,8 +304,8 @@ export default function HomeFeed() {
                       )}
                     </div>
 
-                    {/* COMMENT INPUT — hidden after submitting once */}
-                    {!submittedFeedback[p.postId] && (
+                    {/* COMMENT INPUT — hidden if user already commented */}
+                    {!p.feedbacks?.some((f: any) => f.userName === user.Name) && (
                       <div className="flex gap-2 mt-3">
                         <input
                           type="text"
