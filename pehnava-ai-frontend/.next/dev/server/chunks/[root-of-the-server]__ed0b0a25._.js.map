@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 46, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/taru/FindMyProf/find-my-prof/app/api/verify-otp/route.ts"],"sourcesContent":["import { NextResponse } from \"next/server\";\r\n\r\nexport async function POST(req: Request) {\r\n  const { email, otp } = await req.json();\r\n\r\n  globalThis.otpStore = globalThis.otpStore || {};\r\n  const validOtp = globalThis.otpStore[email];\r\n\r\n  if (validOtp && otp === validOtp) {\r\n    delete globalThis.otpStore[email];\r\n    return NextResponse.json({ success: true });\r\n  }\r\n\r\n  return NextResponse.json({ success: false });\r\n}\r\n"],"names":[],"mappings":";;;;AAAA;;AAEO,eAAe,KAAK,GAAY;IACrC,MAAM,EAAE,KAAK,EAAE,GAAG,EAAE,GAAG,MAAM,IAAI,IAAI;IAErC,WAAW,QAAQ,GAAG,WAAW,QAAQ,IAAI,CAAC;IAC9C,MAAM,WAAW,WAAW,QAAQ,CAAC,MAAM;IAE3C,IAAI,YAAY,QAAQ,UAAU;QAChC,OAAO,WAAW,QAAQ,CAAC,MAAM;QACjC,OAAO,gJAAY,CAAC,IAAI,CAAC;YAAE,SAAS;QAAK;IAC3C;IAEA,OAAO,gJAAY,CAAC,IAAI,CAAC;QAAE,SAAS;IAAM;AAC5C","debugId":null}}]
+}

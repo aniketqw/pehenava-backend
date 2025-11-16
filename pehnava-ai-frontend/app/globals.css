@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+body {
+  color: #1f2937; /* same as text-gray-800 */
+}

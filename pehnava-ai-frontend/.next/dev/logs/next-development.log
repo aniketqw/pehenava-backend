@@ -1,0 +1,91 @@
+[00:00:01.728] Server  LOG      ✓ Ready in 1180ms
+[00:00:03.428] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:00:04.997] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:31.195] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:32.828] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:03:01.004] Server  LOG      ✓ Compiled in 46ms
+[00:03:05.154] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:06.842] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:03:53.031] Server  LOG      ✓ Compiled in 47ms
+[00:04:15.787] Server  LOG      ✓ Compiled in 43ms
+[00:04:21.738] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:23.381] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:04:28.942] Browser LOG     PostName -->  Post 3 Created by Influencer
+[00:04:38.064] Browser LOG     PostName -->  Post 2 Created by Influencer
+[00:04:45.063] Browser LOG     PostName -->  Summer Fashion 2024DD
+[00:04:54.095] Browser LOG     PostName -->  Summer Fashion 2024D
+[00:05:00.396] Browser LOG     PostName -->  Post Created by Influencer
+[00:05:04.863] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:06.509] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:06:34.179] Browser LOG     PostName -->  Post Created by Influencer
+[00:07:17.078] Browser LOG     PostName -->  Summer Fashion 2024D
+[00:08:03.252] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:05.178] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:08:16.430] Browser LOG     PostName -->  Summer Fashion 2024D
+[00:08:53.913] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:55.884] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:11:45.070] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:46.857] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:12:21.986] Browser LOG     PostName -->  Summer Fashion 2024
+[00:12:26.638] Browser LOG     PostName -->  Winter Collection 20253v
+[00:14:40.964] Server  LOG      ✓ Compiled in 85ms
+[00:14:41.832] Browser ERROR   uncaughtError: ReferenceError: openSharePostId is not defined
+[00:15:19.391] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:15:19.623] Server  LOG      ✓ Compiled in 52ms
+[00:15:19.837] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:20.971] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:22.563] Browser WARN    Image with src "/background-login.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:15:22.563] Browser WARN    Image with src "/background-login.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:15:24.752] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:24.939] Browser WARN    Image with src "/background-login.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:15:24.939] Browser WARN    Image with src "/background-login.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:15:57.208] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:05.893] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:16:15.702] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:15.843] Browser WARN    Image with src "/background-login.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:16:15.843] Browser WARN    Image with src "/background-login.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:16:28.269] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:29.914] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:17:01.154] Browser LOG     PostName -->  Winter Collectddion 2025
+[00:17:26.361] Server  LOG      ✓ Compiled in 50ms
+[00:17:29.130] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:17:30.775] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:17:36.768] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:17:36.962] Browser WARN    Image with src "/background-login.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:17:36.962] Browser WARN    Image with src "/background-login.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:17:49.418] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:17:51.067] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:18:35.701] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:18:35.865] Browser WARN    Image with src "/background-login.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:18:35.865] Browser WARN    Image with src "/background-login.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:19:57.980] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:19:59.644] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:27:21.504] Server  LOG      ✓ Compiled in 141ms
+[00:27:34.684] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:27:36.496] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:28:04.390] Server  LOG      ✓ Compiled in 52ms
+[00:28:04.831] Browser WARN    Image with src "/ai-fashion.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:29:51.854] Server  LOG      ✓ Compiled in 71ms
+[00:29:56.121] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:29:57.931] Browser WARN    Image with src "https://res.cloudinary.com/dhfdccotv/image/upload/v1763274535/pehenava/posts/1763274535011-691962aa770a39ab8ea85cbf-unnamed.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:30:06.855] Browser WARN    Image with src "/ai-fashion.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
