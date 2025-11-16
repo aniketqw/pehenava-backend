@@ -1190,7 +1190,6 @@ GET /api/posts/view/by-name?name=summer fashion 2024
   },
   "feedbacks": [
     {
-      "feedbackId": "673f6bc234567890def",
       "userId": "673d5ab123456789xyz",
       "userName": "Jane Smith",
       "like": true,
@@ -1205,7 +1204,7 @@ GET /api/posts/view/by-name?name=summer fashion 2024
 ```
 
 **Response Format:**
-Identical to the View Post endpoint - returns complete post details with all feedback.
+Returns complete post details with all feedback. Note: `feedbackId` is not included in feedback objects.
 
 **Error Responses:**
 

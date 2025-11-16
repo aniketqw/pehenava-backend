@@ -462,9 +462,8 @@ exports.viewPostByName = async (req, res) => {
       .populate('userId', 'Name')
       .sort({ createdAt: -1 }); // Newest first
 
-    // Format feedback array
+    // Format feedback array (feedbackId removed as per requirement)
     const formattedFeedbacks = feedbacks.map(feedback => ({
-      feedbackId: feedback._id,
       userId: feedback.userId._id,
       userName: feedback.userId.Name,
       like: feedback.like,
