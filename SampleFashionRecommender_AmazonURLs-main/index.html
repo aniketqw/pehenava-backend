@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Pehenava_Amazon Marketplace</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; }
+    input { width: 70%; padding: 10px; }
+    button { padding: 10px 14px; }
+    #result { margin-top: 18px; }
+    a { word-break: break-all; }
+  </style>
+</head>
+<body>
+  <h2>Pehenava_Amazon Marketplace</h2>
+  <input id="q" placeholder="e.g., colorblocked shirt" />
+  <button onclick="search()">Search</button>
+  <div id="result"></div>
+
+  <script>
+    async function search() {
+      const out = document.getElementById('result');
+      const q = document.getElementById('q').value.trim();
+      if (!q) { out.textContent = 'Type something…'; return; }
+      out.textContent = 'Searching…';
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        if (data.error) { out.textContent = data.error; return; }
+        out.innerHTML = `
+          <div><b>Match:</b> ${data.category}</div>
+          <div style="margin-top:8px;">
+            <a href="${data.amazon_url}" target="_blank">Amazon</a>
+          </div>
+        `;
+      } catch (e) {
+        out.textContent = 'Request failed. Is the server running?';
+        console.error(e);
+      }
+    }
+  </script>
+</body>
+</html>
