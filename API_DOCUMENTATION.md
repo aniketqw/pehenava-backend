@@ -693,7 +693,7 @@ curl -X PUT http://localhost:3000/api/posts/673f5ac123456789abc \
 
 ### Get All Posts
 
-Retrieve all posts with basic information and feedback counts (no detailed feedback). Use this endpoint to display posts in a list or grid view.
+Retrieve all posts with complete feedback details for each post. Use this endpoint to display posts in a feed/timeline view with feedback immediately visible.
 
 **Endpoint:** `GET /api/posts`
 
@@ -708,7 +708,7 @@ Authorization: Bearer <accessToken>
 ```json
 {
   "message": "Posts retrieved successfully",
-  "count": 3,
+  "count": 2,
   "posts": [
     {
       "postId": "673f5ac123456789abc",
@@ -720,6 +720,22 @@ Authorization: Bearer <accessToken>
         "Name": "John Doe",
         "role": "Influencer"
       },
+      "feedbacks": [
+        {
+          "userId": "673d5ab123456789xyz",
+          "userName": "Jane Smith",
+          "like": true,
+          "description": "Love this style! Perfect for summer",
+          "createdAt": "2025-11-15T12:30:00.000Z"
+        },
+        {
+          "userId": "673d8ef456789012jkl",
+          "userName": "Bob Wilson",
+          "like": false,
+          "description": "Not my preferred style",
+          "createdAt": "2025-11-15T13:45:00.000Z"
+        }
+      ],
       "likesCount": 15,
       "dislikesCount": 3,
       "createdAt": "2025-11-15T10:58:13.362Z"
@@ -734,6 +750,7 @@ Authorization: Bearer <accessToken>
         "Name": "Jane Smith",
         "role": "Recommender"
       },
+      "feedbacks": [],
       "likesCount": 8,
       "dislikesCount": 1,
       "createdAt": "2025-11-15T11:30:00.000Z"
@@ -747,11 +764,17 @@ Authorization: Bearer <accessToken>
 - `posts`: Array of post objects with:
   - Basic post info (postId, name, description, photo)
   - Creator information (userId, Name, role)
-  - Feedback counts ONLY (no detailed feedback)
+  - **Complete feedbacks array** with userId, userName, like, description, createdAt
+  - Feedback counts (likesCount, dislikesCount)
   - Creation timestamp
 
-**Error Responses:**
+**Important Notes:**
+- Each post includes its **complete feedback array** (sorted newest first)
+- Empty array `[]` returned for posts with no feedback
+- Feedback format is consistent with View Post endpoints
+- No `feedbackId` included in feedback objects
 
+**Error Responses:**
 **401 Unauthorized - No Token:**
 ```json
 {
@@ -765,11 +788,12 @@ curl -X GET http://localhost:3000/api/posts \
   -H "Authorization: Bearer eyJhbGc..."
 ```
 
-**Use Case:**
-- Frontend loads this endpoint on page load
-- Displays posts in list/grid view with like/dislike counts
-- User can click on a post or search for specific posts
-- Then call View Post endpoint for detailed feedback
+**Use Cases:**
+- Display posts in feed/timeline with feedback immediately visible
+- No need for separate View Post call to see feedback
+- Single request to load all posts with complete data
+- Useful for social feed views where users see feedback inline
+- Can filter/sort posts by feedback counts on frontend
 
 ---
 
